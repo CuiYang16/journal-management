@@ -1,25 +1,26 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function login(userLogin) {
   return request({
-    url: '/user/login',
+    url: '/jm-user/user/login',
     method: 'post',
-    data
+    data:{userLogin}
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/jm-user/user/get-info',
     method: 'get',
     params: { token }
   })
 }
 
-export function logout() {
+export function logout(token) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/jm-user/user/logout',
+    method: 'post',
+    data:{token}
   })
 }
 

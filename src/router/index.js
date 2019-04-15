@@ -39,15 +39,43 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '',
+    path: '/',
     component: Layout,
     redirect: 'dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
+        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true,role: ['admin','editor'] }
+      }
+    ]
+  },
+  // 杂志管理
+  {
+    path: '/journal',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '/journalDetail',
+        component: () => import('@/views/journalDetail/index'),
+        name: 'JournalDetail',
+        meta: { title: 'journalDetail', icon: 'table', noCache: true ,role: ['admin','editor']}
+      }
+    ]
+  },
+  // 杂志类型管理
+  {
+    path: '/type',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '/journalType',
+        component: () => import('@/views/journalType/index'),
+        name: 'JournalType',
+        meta: { title: 'journalType', icon: 'table', noCache: true ,role: ['admin','editor']}
       }
     ]
   }

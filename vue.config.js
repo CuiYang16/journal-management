@@ -1,4 +1,4 @@
-'use strict'
+// 'use strict'
 const path = require('path')
 const pkg = require('./package.json')
 
@@ -21,7 +21,8 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  // 关闭eslint校验
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: port,
