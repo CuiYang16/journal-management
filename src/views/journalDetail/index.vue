@@ -1,27 +1,61 @@
 <template>
   <div id="journal">
     <div class="header">
-      <el-button-group style="float:right;">
-        <el-button
-          type="danger"
-          size="small"
-          icon="el-icon-delete"
-          :disabled="multipleBtnVisible"
-          @click="delMultipleJournalDetail"
-        >批量删除</el-button>
-        <el-button
-          size="small"
-          icon="el-icon-plus"
-          type="primary"
-          style="float:right;margin-bottom:3px;margin-right:5px;"
-          @click="addJournal"
-        >添加杂志</el-button>
-      </el-button-group>
+      <el-row type="flex" :gutter="0" justify="end">
+        <ElCol :span="10">
+          <div class="checkbox-group">
+            <el-checkbox
+              label="可借阅状态"
+              :disabled="notBorrowStatus"
+              v-model="borrowStatus"
+              @change="borrowStatusChange"
+            ></el-checkbox>
+            <el-checkbox
+              label="不可借阅状态"
+              :disabled="borrowStatus"
+              v-model="notBorrowStatus"
+              @change="notBorrowStatusChange"
+            ></el-checkbox>
+            <el-checkbox
+              label="已删除状态"
+              :disabled="notDeleteStatus"
+              v-model="deleteStatus"
+              @change="deleteStatusChange"
+            ></el-checkbox>
+            <el-checkbox
+              label="未删除状态"
+              :disabled="deleteStatus"
+              v-model="notDeleteStatus"
+              @change="notDeleteStatusChange"
+            ></el-checkbox>
+          </div>
+        </ElCol>
+
+        <el-col :span="5">
+          <el-button-group style="float:right;">
+            <el-button
+              type="danger"
+              size="small"
+              icon="el-icon-delete"
+              :disabled="multipleBtnVisible"
+              @click="delMultipleJournalDetail"
+            >批量删除</el-button>
+
+            <el-button
+              size="small"
+              icon="el-icon-plus"
+              type="primary"
+              style="margin-bottom:3px;"
+              @click="addJournal"
+            >添加杂志</el-button>
+          </el-button-group>
+        </el-col>
+      </el-row>
     </div>
 
     <div class="journal-data">
       <el-table
-      ref="multipleTable"
+        ref="multipleTable"
         :data="tableData"
         style="width: 100%"
         :highlight-current-row="true"
@@ -29,8 +63,8 @@
         @expand-change="expandChange"
         @selection-change="handleSelectionChange"
         @select="handleSelection"
-        @select-all="handleSelection"
-      >
+        @select-all="handleSelection">
+        
         <el-table-column type="selection" width="55"></el-table-column>
 
         <el-table-column type="expand">
@@ -51,54 +85,71 @@
                   >
                 </el-popover>
               </el-form-item>
+
               <el-form-item label="作者">
                 <span>{{ props.row.author }}</span>
               </el-form-item>
+
               <el-form-item label="出版时间">
                 <span>{{ (props.row.publishTime==null||props.row.publishTime=="")?"--":dateFormat(null,null,props.row.publishTime) }}</span>
               </el-form-item>
+
               <el-form-item label="卷号">
                 <span>{{ props.row.reelNumber }}</span>
               </el-form-item>
+
               <el-form-item label="总期号">
                 <span>{{ props.row.totalIssue }}</span>
               </el-form-item>
+
               <el-form-item label="国内统一刊号">
                 <span>{{ props.row.cn }}</span>
               </el-form-item>
+
               <el-form-item label="国际标准书号">
                 <span>{{ props.row.isbn }}</span>
               </el-form-item>
+
               <el-form-item label="国际标准刊号">
                 <span>{{ props.row.issn }}</span>
               </el-form-item>
+
               <el-form-item label="出版周期">
                 <span>{{ props.row.publicationCycle }}</span>
               </el-form-item>
+
               <el-form-item label="出版社">
                 <span>{{ props.row.publishingHouse }}</span>
               </el-form-item>
+
               <el-form-item label="主办" prop="journalHost">
                 <span>{{ props.row.journalHost }}</span>
               </el-form-item>
+
               <el-form-item label="是否国外">
                 <span>{{ props.row.isForeign==true?'是':'否' }}</span>
               </el-form-item>
+
               <el-form-item label="出版地区">
                 <span>{{ (props.row.publishingArea==null||props.row.publishingArea=="")?props.row.isForeign==true?"国外":"--":publishingAreaFormat(props.row.publishingArea) }}</span>
               </el-form-item>
+
               <el-form-item label="出版语言">
                 <span>{{ (props.row.jounalLanguage==null||props.row.jounalLanguage=="")?"--":jounalLanguageFormat(props.row.jounalLanguage) }}</span>
               </el-form-item>
+
               <el-form-item label="国外代号">
                 <span>{{ props.row.foreignCodes }}</span>
               </el-form-item>
+
               <el-form-item label="国内代号">
                 <span>{{ props.row.domesticCode }}</span>
               </el-form-item>
+
               <el-form-item label="开本">
                 <span>{{ props.row.format }}</span>
               </el-form-item>
+
               <el-form-item label="页数">
                 <span>{{ props.row.pageNumber }}</span>
               </el-form-item>
@@ -106,10 +157,15 @@
               <el-form-item label="资料类别">
                 <span>{{ props.row.type==null?"--":(props.row.type.typeName==null||props.row.type.typeName=="")?"--":props.row.type.typeName }}</span>
               </el-form-item>
-              <el-form-item label="商品描述">
-                <span>{{ props.row.description }}</span>
-              </el-form-item>
-
+              <el-row type="flex" class="row-bg">
+                  <el-form-item label="商品描述" style="width:100%">
+                  <el-popover placement="right" trigger="hover">
+                      <div v-html="props.row.description"></div>
+                        <el-button slot="reference" size="mini" type="primary">预览</el-button>
+                         </el-popover>
+                          <div class="describe-form">{{ props.row.description }}</div>
+                  </el-form-item>
+              </el-row>
               <el-row type="flex" class="row-bg">
                 <el-col :span="24">
                   <el-form-item label="附加图片">
@@ -133,14 +189,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="ID" prop="journalId"></el-table-column>
+        <el-table-column label="ID" prop="journalId" width="100"></el-table-column>
 
         <el-table-column label="名称" prop="journalName"></el-table-column align="center">
 
         <el-table-column
           label="入库时间"
           prop="journalJoinTime"
-          sortable
           :formatter="dateFormat"
           width="150"
            align="center"
@@ -148,17 +203,17 @@
 
         <el-table-column label="是否可借阅" prop="isBorrow" align="center">
           <template slot-scope="scope">
-            <div>{{scope.row.isBorrow==false?"否":"是"}}</div>
+            <el-tag :type="scope.row.isBorrow==false?'danger':'success'">{{scope.row.isBorrow==false?"否":"是"}}</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column label="期号" prop="issue" align="center" ></el-table-column>
 
-        <el-table-column label="杂志级别" prop="journalLevel" align="center"></el-table-column>
+        <el-table-column label="杂志级别" prop="journalLevel" align="center" :formatter="journalLevelFormmatter"></el-table-column>
 
         <el-table-column label="已删除" prop="isDelete" align="center">
           <template slot-scope="scope">
-            <div>{{scope.row.isDelete==false?"否":"是"}}</div>
+            <el-tag :type="scope.row.isDelete==false?'danger':'success'">{{scope.row.isDelete==false?"否":"是"}}</el-tag> 
           </template>
         </el-table-column>
 
@@ -203,11 +258,19 @@
           </el-radio-group>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="delDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="delSubmit">确 定</el-button>
+          <el-button @click="delDialogVisible = false" size="small">取 消</el-button>
+          <el-button type="primary" @click="delSubmit" size="small">确 定</el-button>
         </div>
       </el-dialog>
     </div>
+    <el-tooltip placement="top" content="回到顶部">
+    <back-to-top
+      :custom-style="myBackToTopStyle"
+      :visibility-height="150"
+      :back-position="50"
+      transition-name="fade"
+    />
+    </el-tooltip>
   </div>
 </template>
 
@@ -230,7 +293,12 @@
   -ms-user-select: none;
   user-select: none;
 }
-
+#journal .describe-form {
+  width: 100%;
+  max-height: 60px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 #journal .header {
   margin: 15px;
 }
@@ -242,12 +310,14 @@
   color: #303133;
 }
 #journal .el-table {
-  padding-top: 15px;
   font-size: 13px;
 }
 #journal .page-group {
   float: right;
-  margin: 5px;
+  margin: 5px 10px 0 0;
+}
+#journal .checkbox-group {
+  margin-top: 10px;
 }
 </style>
 
@@ -266,15 +336,20 @@ import {
 } from "@/api/journalDetail";
 import AddDialog from "@/views/journalDetail/components/addDialog";
 import EditDialog from "@/views/journalDetail/components/editDialog";
+import BackToTop from "@/components/BackToTop";
+
 export default {
   components: {
     AddDialog,
-    EditDialog
+    EditDialog,
+    BackToTop
   },
   data() {
     return {
       tableData: [],
       imageList: [],
+      selectType: "",
+      selectValue: "",
       delRow: {},
       delType: 1,
       delMul: false,
@@ -297,12 +372,73 @@ export default {
         isLastPage: false,
         size: 0,
         pages: 1
+      },
+      borrowStatus: false,
+      deleteStatus: false,
+      notBorrowStatus: false,
+      notDeleteStatus: false,
+      pickerOptions1: {
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            }
+          },
+          {
+            text: "昨天",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            }
+          },
+          {
+            text: "一周前",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            }
+          }
+        ]
+      },
+      myBackToTopStyle: {
+        right: "0px",
+        bottom: "50px",
+        width: "30px",
+        height: "30px",
+        "border-radius": "4px",
+        "line-height": "40px", // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+        background: "#e7eaf1" // 按钮的背景颜色 The background color of the button
       }
     };
   },
   methods: {
-    getJournal(currentPage, pageSize) {
-      getJournals(currentPage, pageSize)
+    getJournal(
+      currentPage,
+      pageSize,
+      isBorrow,
+      isDelete,
+      notBorrowStatus,
+      notDeleteStatus
+    ) {
+      let b = 2;
+      let d = 2;
+      if (this.borrowStatus) {
+        b = 1;
+      }
+      if (this.deleteStatus) {
+        d = 1;
+      }
+      if (this.notBorrowStatus) {
+        b = 0;
+      }
+      if (this.notDeleteStatus) {
+        d = 0;
+      }
+
+      getJournals(currentPage, pageSize, b, d)
         .then(res => {
           this.tableData = res.pageInfo.list;
           this.pageInfo.currentPage = res.pageInfo.pageNum;
@@ -319,6 +455,10 @@ export default {
         })
         .catch(error => {
           console.log(error);
+          this.$message({
+            message: "初始化信息失败，请刷新重试！",
+            type: "error"
+          });
         });
     },
     addJournal() {
@@ -333,7 +473,7 @@ export default {
           if (res.val != 0) {
             this.$notify({
               title: "成功",
-              duration: 1500,
+              duration: 3500,
               message: res.str,
               type: "success"
             });
@@ -341,8 +481,19 @@ export default {
             this.$refs.addDialog.$refs.upload.submit();
             this.$refs.addDialog.$refs.upload2.submit();
             setTimeout(() => {
-              this.getJournal(1, this.pageInfo.pageSize);
+              this.getJournal(
+                1,
+                this.pageInfo.pageSize,
+                this.borrowStatus,
+                this.deleteStatus,
+                this.notBorrowStatus,
+                this.notDeleteStatus
+              );
             }, 100);
+            this.$nextTick(function() {
+              this.$refs.addDialog.$refs.addform.resetFields();
+              this.$refs.addDialog.$refs.infoTinymce.setContent("");
+            });
           }
         })
         .catch(error => {
@@ -350,7 +501,7 @@ export default {
 
           this.$notify.error({
             title: "错误",
-            duration: 3500,
+            duration: 4500,
             message: error
           });
         });
@@ -359,6 +510,11 @@ export default {
       this.editDialogValue.editFormVisible = !this.editDialogValue
         .editFormVisible;
       this.editDialogValue.editValue = Object.assign({}, row);
+      this.$set(
+        this.editDialogValue.editValue,
+        "jimg",
+        this.editDialogValue.editValue.journalImg
+      );
     },
     editSubmit(editValue) {
       this.editDialogValue.editFormVisible = !this.editDialogValue
@@ -378,7 +534,7 @@ export default {
               .catch(error => {
                 this.$notify.error({
                   title: "失败",
-                  duration: 3500,
+                  duration: 4500,
                   message: "图片上传失败，请刷新重试"
                 });
                 return;
@@ -387,12 +543,16 @@ export default {
             setTimeout(() => {
               this.getJournal(
                 this.pageInfo.currentPage,
-                this.pageInfo.pageSize
+                this.pageInfo.pageSize,
+                this.borrowStatus,
+                this.deleteStatus,
+                this.notBorrowStatus,
+                this.notDeleteStatus
               );
             }, 100);
             this.$notify({
               title: "成功",
-              duration: 1500,
+              duration: 3500,
               message: res.str,
               type: "success"
             });
@@ -402,21 +562,14 @@ export default {
           console.log(error);
           this.$notify.error({
             title: "失败",
-            duration: 3500,
+            duration: 4500,
             message: "更新失败，请刷新重试"
           });
         });
     },
     delJournalDetail(row) {
       this.delMul = false;
-      if (row.isDelete) {
-        this.$notify.error({
-          title: "失败",
-          duration: 3500,
-          message: "此条信息已删除！"
-        });
-        return;
-      }
+      
       this.delRow = row;
       this.delDialogVisible = !this.delDialogVisible;
     },
@@ -424,6 +577,14 @@ export default {
       this.delDialogVisible = !this.delDialogVisible;
       // 假删
       if (this.delType === 1 && this.delMul === false) {
+        if (this.delRow.isDelete) {
+        this.$notify.error({
+          title: "失败",
+          duration: 4500,
+          message: "此条信息已是删除状态！"
+        });
+        return;
+      }
         delJournal(this.delRow.journalId)
           .then(res => {
             if (res.val == 1) {
@@ -436,14 +597,16 @@ export default {
 
               this.$notify({
                 title: "成功",
-                duration: 1500,
+                duration: 3500,
                 message: "修改删除状态成功!",
                 type: "success"
               });
+              this.multipleSelectionAll = [];
+              this.$refs.multipleTable.clearSelection();
             } else {
               this.$notify.error({
                 title: "失败",
-                duration: 3500,
+                duration: 4500,
                 message: "修改删除状态失败，请刷新重试"
               });
             }
@@ -451,7 +614,7 @@ export default {
           .catch(error => {
             this.$notify.error({
               title: "失败",
-              duration: 3500,
+              duration: 4500,
               message: "删除状态修改失败，请刷新重试"
             });
           });
@@ -465,24 +628,32 @@ export default {
               if (this.pageInfo.isLastPage && this.tableData.length == 1) {
                 this.getJournal(
                   this.pageInfo.currentPage - 1,
-                  this.pageInfo.pageSize
+                  this.pageInfo.pageSize,
+                  this.borrowStatus,
+                  this.deleteStatus,
+                  this.notBorrowStatus,
+                  this.notDeleteStatus
                 );
               } else {
                 this.getJournal(
                   this.pageInfo.currentPage,
-                  this.pageInfo.pageSize
+                  this.pageInfo.pageSize,
+                  this.borrowStatus,
+                  this.deleteStatus,
+                  this.notBorrowStatus,
+                  this.notDeleteStatus
                 );
               }
               this.$notify({
                 title: "成功",
-                duration: 1500,
+                duration: 3500,
                 message: "删除成功!",
                 type: "success"
               });
             } else {
               this.$notify.error({
                 title: "失败",
-                duration: 3500,
+                duration: 4500,
                 message: "删除失败，请刷新重试"
               });
             }
@@ -490,7 +661,7 @@ export default {
           .catch(error => {
             this.$notify.error({
               title: "失败",
-              duration: 3500,
+              duration: 4500,
               message: "删除失败，请刷新重试"
             });
           });
@@ -500,90 +671,152 @@ export default {
         this.multipleSelectionAll.forEach(m => {
           ids.push(m.journalId);
         });
-          // 假批量删
-          if (this.delType === 1) {
-            delMulJournal(ids)
-              .then(res => {
-                if (res.val == ids.length) {
-                  for (var t of this.tableData) {
-                    for(var id of ids){
-                      if (t.journalId == id) {
+        // 假批量删
+        if (this.delType === 1) {
+          delMulJournal(ids)
+            .then(res => {
+              if (res.val == ids.length) {
+                for (var t of this.tableData) {
+                  for (var id of ids) {
+                    if (t.journalId == id) {
                       this.$set(t, "isDelete", true);
-                     break;
+                      break;
                     }
-                    }
-                   
                   }
-
-                  this.$notify({
-                    title: "成功",
-                    duration: 1500,
-                    message: "批量修改删除状态成功!",
-                    type: "success"
-                  });
-                } else {
-                  this.$notify.error({
-                    title: "失败",
-                    duration: 3500,
-                    message: "批量修改删除状态失败，请刷新重试"
-                  });
                 }
-              })
-              .catch(error => {
-                console.log(error);
-                
+
+                this.$notify({
+                  title: "成功",
+                  duration: 3500,
+                  message: "批量修改删除状态成功!",
+                  type: "success"
+                });
+                this.multipleSelectionAll = [];
+                this.$refs.multipleTable.clearSelection();
+              } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 3500,
+                  duration: 4500,
                   message: "批量修改删除状态失败，请刷新重试"
                 });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+
+              this.$notify.error({
+                title: "失败",
+                duration: 4500,
+                message: "批量修改删除状态失败，请刷新重试"
               });
-          }
-          if (this.delType === 0) {
-            delMulJournalTrue(ids).then(res=>{
-              if(res.val==ids.length){
-                this.getJournal(this.pageInfo.currentPage,this.pageInfo.pageSize);
-                this.multipleSelectionAll=[];
+            });
+        }
+        if (this.delType === 0) {
+          delMulJournalTrue(ids)
+            .then(res => {
+              if (res.val == ids.length) {
+                this.getJournal(
+                  this.pageInfo.currentPage,
+                  this.pageInfo.pageSize,
+                  this.borrowStatus,
+                  this.deleteStatus,
+                  this.notBorrowStatus,
+                  this.notDeleteStatus
+                );
+                this.multipleSelectionAll = [];
                 this.$notify({
-                    title: "成功",
-                    duration: 1500,
-                    message: "批量删除成功!",
-                    type: "success"
-                  });
-              }else{
+                  title: "成功",
+                  duration: 3500,
+                  message: "批量删除成功!",
+                  type: "success"
+                });
+              } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 3500,
+                  duration: 4500,
                   message: "批量删除失败，请刷新重试"
                 });
               }
-            }).catch(error=>{
+            })
+            .catch(error => {
               console.log(error);
-              
+
               this.$notify.error({
-                  title: "失败",
-                  duration: 3500,
-                  message: "批量删除失败，请刷新重试"
-                });
+                title: "失败",
+                duration: 4500,
+                message: "批量删除失败，请刷新重试"
+              });
             });
-          }
-        
+        }
       }
     },
+    borrowStatusChange() {
+      this.getJournal(
+        1,
+        this.pageInfo.pageSize,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
+    },
+    deleteStatusChange() {
+      this.getJournal(
+        1,
+        this.pageInfo.pageSize,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
+    },
+    notBorrowStatusChange() {
+      this.getJournal(
+        1,
+        this.pageInfo.pageSize,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
+
+    },
+    notDeleteStatusChange() {
+      this.getJournal(
+        1,
+        this.pageInfo.pageSize,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
+    },
     delMultipleJournalDetail() {
-      this.delMul=true;
+      this.delMul = true;
       this.delDialogVisible = !this.delDialogVisible;
     },
     delMultipleJournalDetailSubmit() {},
     handleSizeChange(val) {
       this.changePageCoreRecordData();
-      this.getJournal(this.pageInfo.currentPage, val);
+      this.getJournal(
+        this.pageInfo.currentPage,
+        val,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
     },
     handleCurrentChange(val) {
-      console.log(this.multipleSelectionAll);
-
       this.changePageCoreRecordData();
-      this.getJournal(val, this.pageInfo.pageSize);
+      this.getJournal(
+        val,
+        this.pageInfo.pageSize,
+        this.borrowStatus,
+        this.deleteStatus,
+        this.notBorrowStatus,
+        this.notDeleteStatus
+      );
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -611,6 +844,7 @@ export default {
           console.log(error);
         });
     },
+
     dateFormat: function(row, column, cellValue, index) {
       if (cellValue != null) {
         var date = new Date(cellValue); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -628,6 +862,7 @@ export default {
         return "--";
       }
     },
+
     publishingAreaFormat(Value) {
       const publishingArea = this.$refs.addDialog.publishingAreaOptions;
       for (var i = 0; i < publishingArea.length; i++) {
@@ -645,6 +880,22 @@ export default {
         }
       }
       return "--";
+    },
+    journalLevelFormmatter(row, column, cellValue, index) {
+      const journalLevel = this.$refs.addDialog.journalLevelOptions;
+      for (var j of journalLevel) {
+        if (j.value === cellValue) {
+          return j.label;
+        }
+      }
+      return "--";
+    },
+    selectable(row) {
+      if (row.isDelete) {
+        return false;
+      } else {
+        return true;
+      }
     },
     // 记忆选择核心方法
     changePageCoreRecordData() {
@@ -723,8 +974,8 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getJournal(1, this.pageInfo.pageSize);
+  created() {
+    this.getJournal(1, this.pageInfo.pageSize, "", "", "", "");
   }
 };
 </script>

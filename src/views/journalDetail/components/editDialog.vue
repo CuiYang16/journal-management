@@ -1,20 +1,21 @@
 <template>
-  <div>
+  <div id="edit-dialog">
     <el-dialog
       title="编辑杂志期刊"
       :visible.sync="editDialogValue.editFormVisible"
       :close-on-click-modal="false"
     >
-      <el-form :model="editDialogValue.editValue" status-icon ref="editform">
+      <el-form :model="editDialogValue.editValue" status-icon ref="editform" :rules="editRules">
         <el-form-item label="杂志期刊名称" :label-width="formLabelWidth" prop="journalName">
-          <el-input
-            v-model="editDialogValue.editValue.journalName"
-            autocomplete="off"
-            :maxlength="155"
-          ></el-input>
+          <el-input v-model="editDialogValue.editValue.journalName" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="杂志期刊级别" :label-width="formLabelWidth" prop="journalLevel">
-          <el-select v-model="editDialogValue.editValue.journalLevel" filterable placeholder="请选择">
+          <el-select
+            v-model="editDialogValue.editValue.journalLevel"
+            filterable
+            placeholder="请选择"
+            clearable
+          >
             <el-option
               v-for="item in journalLevelOptions"
               :key="item.value"
@@ -31,6 +32,7 @@
                 filterable
                 placeholder="请选择"
                 :disabled="editDialogValue.editValue.isForeign==true"
+                clearable
               >
                 <el-option
                   v-for="item in publishingAreaOptions"
@@ -52,7 +54,7 @@
         </el-row>
 
         <el-form-item label="杂志期刊语言" :label-width="formLabelWidth" prop="jounalLanguage">
-          <el-select v-model="editDialogValue.editValue.jounalLanguage" placeholder="请选择">
+          <el-select v-model="editDialogValue.editValue.jounalLanguage" placeholder="请选择" clearable>
             <el-option
               v-for="item in languageOptions"
               :key="item.value"
@@ -62,7 +64,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="出版周期" :label-width="formLabelWidth" prop="publicationCycle">
-          <el-select v-model="editDialogValue.editValue.publicationCycle" placeholder="请选择">
+          <el-select
+            v-model="editDialogValue.editValue.publicationCycle"
+            placeholder="请选择"
+            clearable
+          >
             <el-option
               v-for="item in publicationCycleOptions"
               :key="item.value"
@@ -73,7 +79,12 @@
         </el-form-item>
 
         <el-form-item label="开本" :label-width="formLabelWidth" prop="format">
-          <el-select v-model="editDialogValue.editValue.format" filterable placeholder="请选择">
+          <el-select
+            v-model="editDialogValue.editValue.format"
+            filterable
+            placeholder="请选择"
+            clearable
+          >
             <el-option
               v-for="item in formatOptions"
               :key="item.value"
@@ -105,13 +116,14 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="杂志作者" :label-width="formLabelWidth" prop="author">
-          <el-input v-model="editDialogValue.editValue.author" autocomplete="off"></el-input>
+          <el-input v-model="editDialogValue.editValue.author" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="卷号" :label-width="formLabelWidth" prop="reelNumber">
           <el-input
             v-model="editDialogValue.editValue.reelNumber"
             autocomplete="off"
             placeholder="请输入非零开头的数字!"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="期号" :label-width="formLabelWidth" prop="issue">
@@ -119,6 +131,7 @@
             v-model="editDialogValue.editValue.issue"
             autocomplete="off"
             placeholder="格式：2019-1/2019-11"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="总期号" :label-width="formLabelWidth" prop="totalIssue">
@@ -126,6 +139,7 @@
             v-model="editDialogValue.editValue.totalIssue"
             autocomplete="off"
             placeholder="请输入非零开头的数字!"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="国内统一刊号" :label-width="formLabelWidth" prop="cn">
@@ -140,6 +154,7 @@
             v-model="editDialogValue.editValue.isbn"
             autocomplete="off"
             placeholder="格式：978 0 596 52068 7或9780596520687"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="国际标准刊号" :label-width="formLabelWidth" prop="issn">
@@ -147,15 +162,20 @@
             v-model="editDialogValue.editValue.issn"
             autocomplete="off"
             placeholder="格式：1111-1111"
+            clearable
           ></el-input>
         </el-form-item>
 
         <el-form-item label="出版社" :label-width="formLabelWidth" prop="publishingHouse">
-          <el-input v-model="editDialogValue.editValue.publishingHouse" autocomplete="off"></el-input>
+          <el-input
+            v-model="editDialogValue.editValue.publishingHouse"
+            autocomplete="off"
+            clearable
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="主办方" :label-width="formLabelWidth" prop="journalHost">
-          <el-input v-model="editDialogValue.editValue.journalHost" autocomplete="off"></el-input>
+          <el-input v-model="editDialogValue.editValue.journalHost" autocomplete="off" clearable></el-input>
         </el-form-item>
 
         <el-form-item label="国外代号" :label-width="formLabelWidth" prop="foreignCodes">
@@ -163,6 +183,7 @@
             v-model="editDialogValue.editValue.foreignCodes"
             autocomplete="off"
             placeholder="格式：M1234或M123"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -171,6 +192,7 @@
             v-model="editDialogValue.editValue.domesticCode"
             autocomplete="off"
             placeholder="格式：1-111"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -179,6 +201,7 @@
             v-model="editDialogValue.editValue.pageNumber"
             autocomplete="off"
             placeholder="请输入非零开头的数字!"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -187,6 +210,7 @@
             v-model="editDialogValue.editValue.price"
             autocomplete="off"
             placeholder="格式：1或1.1或1.11!"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -207,7 +231,8 @@
           <el-switch v-model="editDialogValue.editValue.isDelete"></el-switch>
         </el-form-item>
 
-        <el-form-item label="杂志期刊封面" :label-width="formLabelWidth" prop="journalImg">
+        <el-form-item label="杂志期刊封面" :label-width="formLabelWidth" prop="jimg">
+          <el-input v-model="editDialogValue.editValue.jimg" class="hide"></el-input>
           <el-upload
             ref="upload"
             :data="imgData"
@@ -218,8 +243,8 @@
             list-type="picture"
             :auto-upload="false"
             :on-change="handleChange"
-            :on-success="handleAvatarSuccess"
             :on-exceed="onExceed"
+            :on-remove="handleRemove"
             accept=".jpg, .jpeg, .png"
           >
             <el-button size="small" type="primary">点击上传</el-button>
@@ -251,21 +276,22 @@
           </el-dialog>
         </el-form-item>
         <el-form-item label="描述" :label-width="formLabelWidth" prop="description">
-          <el-input
-            type="textarea"
-            v-model="editDialogValue.editValue.description"
-            autocomplete="off"
-            :autosize="{ minRows: 2, maxRows: 4}"
-          ></el-input>
+          <tinymce v-model="editDialogValue.editValue.description" :height="200"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="editDialogValue.editFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editSubmit">确 定</el-button>
+        <el-button @click="editDialogValue.editFormVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="editSubmit" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
+<style scoped>
+#edit-dialog .hide {
+  display: none;
+}
+</style>
+
 
 <script>
 import Vue from "vue";
@@ -287,10 +313,11 @@ import {
   validForeignCodes,
   validDomesticCode
 } from "@/utils/validate";
+import Tinymce from "@/components/Tinymce";
 
 export default {
   props: ["editDialogValue"],
-  components: { BackToTop },
+  components: { BackToTop, Tinymce },
   data() {
     const validateNumber = (rule, value, callback) => {
       if (!validNumber(value)) {
@@ -357,8 +384,8 @@ export default {
         journalName: [
           { required: true, message: "请输入杂志名称", trigger: "blur" }
         ],
-        journalImg: [
-          { required: false, message: "请选择杂志封面", trigger: "change" }
+        jimg: [
+          { required: true, message: "请选择杂志封面", trigger: "change" }
         ],
         author: [
           { required: true, message: "请输入作者名称", trigger: "blur" }
@@ -593,6 +620,8 @@ export default {
       if (!isLt500K) {
         this.$message.error("上传头像图片大小不能超过500k!");
         this.$refs.upload.clearFiles();
+      } else {
+        this.editDialogValue.editValue.jimg = file.name;
       }
     },
     handleChange2(file, fileList) {
@@ -602,10 +631,7 @@ export default {
         fileList.pop();
       }
     },
-    handleAvatarSuccess(res, file) {
-      //console.log(res);
-      this.imgUrl = res.str;
-    },
+
     beforeAvatarUpload(file) {
       const isLt500K = file.size / 1024 / 1024 < 0.5;
       if (!isLt500K) {
@@ -614,7 +640,7 @@ export default {
       return isLt500K;
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      this.editDialogValue.editValue.jimg = null;
     },
     handlePreview(file) {
       console.log(file);
@@ -653,10 +679,10 @@ export default {
           this.editDialogValue.editValue.journalType = JSON.parse(
             this.editDialogValue.editValue.journalType
           );
-          this.fileList=[];
-          this.fileList2=[];
+          this.fileList = [];
+          this.fileList2 = [];
           const journalImg = this.editDialogValue.editValue.journalImg;
-          if (journalImg != null&&journalImg!="") {
+          if (journalImg != null && journalImg != "") {
             this.fileList.push({
               name: journalImg,
               url: require("E:/img/" + journalImg)
@@ -671,9 +697,28 @@ export default {
               });
             });
           }
+          this.$nextTick(function() {
+            this.$refs.editform.clearValidate();
+          });
         } else {
-          
           this.$refs.editform.clearValidate();
+        }
+      }
+    },
+    "editDialogValue.editValue.isForeign": {
+      handler(newValue) {
+        if (newValue == true) {
+          this.editRules.publishingArea = {
+            required: false,
+            message: "请选择地区",
+            trigger: "change"
+          };
+        } else {
+          this.editRules.publishingArea = {
+            required: true,
+            message: "请选择地区",
+            trigger: "change"
+          };
         }
       }
     }

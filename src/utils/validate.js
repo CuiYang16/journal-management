@@ -63,7 +63,7 @@ export function validIssue(value) {
   return reg.test(value);
 }
 export function validCN(value) {
-  const reg = /^CN(\([A-Z]{0,1}\))?[0-9]{2}-[0-9]{4}\/[A-Z0-9]{1,2}$/;
+  const reg = /^(CN|cn)(\([A-Z]{0,1}\))?[0-9]{2}-[0-9]{4}\/[A-Z0-9]{1,2}$/;
   return reg.test(value);
 }
 

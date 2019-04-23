@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 //获取杂志信息
-export function getJournals(pageNum, pageSize) {
+export function getJournals(pageNum, pageSize, isBorrow, isDelete) {
   return request({
     url: '/jm-journal/journal-detail/get-journals',
     method: 'get',
-    params:{pageNum, pageSize}
+    params:{pageNum, pageSize, isBorrow, isDelete}
   })
 }
 

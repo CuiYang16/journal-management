@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="add-dialog">
     <el-dialog
       title="添加杂志期刊"
       :visible.sync="addDialogValue.addFormVisible"
@@ -7,10 +7,10 @@
     >
       <el-form :model="addFormValue" :rules="addRules" status-icon ref="addform">
         <el-form-item label="杂志期刊名称" :label-width="formLabelWidth" prop="journalName">
-          <el-input v-model="addFormValue.journalName" autocomplete="off" :maxlength="155"></el-input>
+          <el-input v-model="addFormValue.journalName" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="杂志期刊级别" :label-width="formLabelWidth" prop="journalLevel">
-          <el-select v-model="addFormValue.journalLevel" filterable placeholder="请选择">
+          <el-select v-model="addFormValue.journalLevel" filterable placeholder="请选择" clearable>
             <el-option
               v-for="item in journalLevelOptions"
               :key="item.value"
@@ -27,6 +27,7 @@
                 filterable
                 placeholder="请选择"
                 :disabled="addFormValue.isForeign==true"
+                clearable
               >
                 <el-option
                   v-for="item in publishingAreaOptions"
@@ -48,7 +49,7 @@
         </el-row>
 
         <el-form-item label="杂志期刊语言" :label-width="formLabelWidth" prop="jounalLanguage">
-          <el-select v-model="addFormValue.jounalLanguage" placeholder="请选择">
+          <el-select v-model="addFormValue.jounalLanguage" placeholder="请选择" clearable>
             <el-option
               v-for="item in languageOptions"
               :key="item.value"
@@ -58,7 +59,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="出版周期" :label-width="formLabelWidth" prop="publicationCycle">
-          <el-select v-model="addFormValue.publicationCycle" placeholder="请选择">
+          <el-select v-model="addFormValue.publicationCycle" placeholder="请选择" clearable>
             <el-option
               v-for="item in publicationCycleOptions"
               :key="item.value"
@@ -69,7 +70,7 @@
         </el-form-item>
 
         <el-form-item label="开本" :label-width="formLabelWidth" prop="format">
-          <el-select v-model="addFormValue.format" filterable placeholder="请选择">
+          <el-select v-model="addFormValue.format" filterable placeholder="请选择" clearable>
             <el-option
               v-for="item in formatOptions"
               :key="item.value"
@@ -89,6 +90,7 @@
             placeholder="选择日期时间"
             align="right"
             :picker-options="pickerOptions2"
+            :default-value="new Date()"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="出版时间" :label-width="formLabelWidth" prop="publishTime">
@@ -101,49 +103,90 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="杂志作者" :label-width="formLabelWidth" prop="author">
-          <el-input v-model="addFormValue.author" autocomplete="off"></el-input>
+          <el-input v-model="addFormValue.author" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="卷号" :label-width="formLabelWidth" prop="reelNumber">
-          <el-input v-model="addFormValue.reelNumber" autocomplete="off" placeholder="请输入非零开头的数字!"></el-input>
+          <el-input
+            v-model="addFormValue.reelNumber"
+            autocomplete="off"
+            placeholder="请输入非零开头的数字!"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="期号" :label-width="formLabelWidth" prop="issue">
-          <el-input v-model="addFormValue.issue" autocomplete="off" placeholder="格式：2019-1/2019-11"></el-input>
+          <el-input
+            v-model="addFormValue.issue"
+            autocomplete="off"
+            placeholder="格式：2019-1/2019-11"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="总期号" :label-width="formLabelWidth" prop="totalIssue">
-          <el-input v-model="addFormValue.totalIssue" autocomplete="off" placeholder="请输入非零开头的数字!"></el-input>
+          <el-input
+            v-model="addFormValue.totalIssue"
+            autocomplete="off"
+            placeholder="请输入非零开头的数字!"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="国内统一刊号" :label-width="formLabelWidth" prop="cn">
           <el-input
             v-model="addFormValue.cn"
             autocomplete="off"
-            placeholder="格式：CN11-1111/AA或CN11-111/A"
+            placeholder="格式：CN11-1111/AA或CN11-111/A或cn11-1111/AA或cn11-111/A"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="国际标准书号" :label-width="formLabelWidth" prop="isbn">
-          <el-input v-model="addFormValue.isbn" autocomplete="off" placeholder="格式：978 0 596 52068 7或9780596520687"></el-input>
+          <el-input
+            v-model="addFormValue.isbn"
+            autocomplete="off"
+            placeholder="格式：978 0 596 52068 7或9780596520687"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="国际标准刊号" :label-width="formLabelWidth" prop="issn">
-          <el-input v-model="addFormValue.issn" autocomplete="off" placeholder="格式：1111-1111"></el-input>
+          <el-input
+            v-model="addFormValue.issn"
+            autocomplete="off"
+            placeholder="格式：1111-1111"
+            clearable
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="出版社" :label-width="formLabelWidth" prop="publishingHouse">
-          <el-input v-model="addFormValue.publishingHouse" autocomplete="off"></el-input>
+          <el-input v-model="addFormValue.publishingHouse" autocomplete="off" clearable></el-input>
         </el-form-item>
 
         <el-form-item label="主办方" :label-width="formLabelWidth" prop="journalHost">
-          <el-input v-model="addFormValue.journalHost" autocomplete="off"></el-input>
+          <el-input v-model="addFormValue.journalHost" autocomplete="off" clearable></el-input>
         </el-form-item>
 
         <el-form-item label="国外代号" :label-width="formLabelWidth" prop="foreignCodes">
-          <el-input v-model="addFormValue.foreignCodes" autocomplete="off" placeholder="格式：M1234或M123"></el-input>
+          <el-input
+            v-model="addFormValue.foreignCodes"
+            autocomplete="off"
+            placeholder="格式：M1234或m123"
+            clearable
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="国内代号" :label-width="formLabelWidth" prop="domesticCode">
-          <el-input v-model="addFormValue.domesticCode" autocomplete="off" placeholder="格式：1-111"></el-input>
+          <el-input
+            v-model="addFormValue.domesticCode"
+            autocomplete="off"
+            placeholder="格式：1-111"
+            clearable
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="页数" :label-width="formLabelWidth" prop="pageNumber">
-          <el-input v-model="addFormValue.pageNumber" autocomplete="off" placeholder="请输入非零开头的数字!"></el-input>
+          <el-input
+            v-model="addFormValue.pageNumber"
+            autocomplete="off"
+            placeholder="请输入非零开头的数字!"
+            clearable
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="价格" :label-width="formLabelWidth" prop="price">
@@ -151,6 +194,7 @@
             v-model="addFormValue.price"
             autocomplete="off"
             placeholder="格式：1或1.1或1.11!"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -160,6 +204,7 @@
             :options="typeOptions"
             :props="props"
             change-on-select
+            clearable
           ></el-cascader>
         </el-form-item>
 
@@ -171,7 +216,8 @@
           <el-switch v-model="addFormValue.isDelete" :disabled="true"></el-switch>
         </el-form-item>
 
-        <el-form-item label="杂志期刊封面" :label-width="formLabelWidth" prop="journalImg">
+        <el-form-item label="杂志期刊封面" :label-width="formLabelWidth" prop="jimg">
+          <el-input v-model="addFormValue.jimg" class="hide"></el-input>
           <el-upload
             ref="upload"
             class="upload-demo"
@@ -186,10 +232,11 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :on-exceed="onExceed"
+            :on-remove="handleRemove"
             accept=".jpg, .jpeg, .png"
           >
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，只允许上传一张</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/jpeg/png文件，且不超过500kb，只允许上传一张</div>
           </el-upload>
         </el-form-item>
 
@@ -206,6 +253,7 @@
             :on-change="handleChange2"
             :before-upload="beforeAvatarUpload"
             :on-exceed="onExceed"
+            :on-success="handleAvatarSuccess2"
             multiple
             accept=".jpg, .jpeg, .png"
           >
@@ -217,12 +265,7 @@
           </el-dialog>
         </el-form-item>
         <el-form-item label="描述" :label-width="formLabelWidth" prop="description">
-          <el-input
-            type="textarea"
-            v-model="addFormValue.description"
-            autocomplete="off"
-            :autosize="{ minRows: 2, maxRows: 4}"
-          ></el-input>
+          <tinymce v-model="addFormValue.description" :height="200" ref="infoTinymce"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -232,6 +275,13 @@
     </el-dialog>
   </div>
 </template>
+
+<style scoped>
+#add-dialog .hide {
+  display: none;
+}
+</style>
+
 
 <script>
 import Vue from "vue";
@@ -249,12 +299,15 @@ import {
   validIssue,
   validCN,
   validIssn,
-  validIsbn,validForeignCodes,validDomesticCode
+  validIsbn,
+  validForeignCodes,
+  validDomesticCode
 } from "@/utils/validate";
+import Tinymce from "@/components/Tinymce";
 
 export default {
   props: ["addDialogValue"],
-  components: { BackToTop },
+  components: { BackToTop, Tinymce },
   data() {
     const validateNumber = (rule, value, callback) => {
       if (!validNumber(value)) {
@@ -293,12 +346,14 @@ export default {
     };
     const validateIsbn = (rule, value, callback) => {
       if (!validIsbn(value)) {
-        callback(new Error("请正确输入国际标准书号(978 0 596 52068 7/9780596520687)!"));
+        callback(
+          new Error("请正确输入国际标准书号(978 0 596 52068 7/9780596520687)!")
+        );
       } else {
         callback();
       }
     };
- const validateForeignCodes = (rule, value, callback) => {
+    const validateForeignCodes = (rule, value, callback) => {
       if (!validForeignCodes(value)) {
         callback(new Error("请正确输入国外代号(M1234或M123)!"));
       } else {
@@ -316,7 +371,7 @@ export default {
       addFormVisible: false,
       addFormValue: {
         journalName: "",
-        journalImg: "",
+        jimg: "",
         author: "",
         journalLevel: "",
         journalJoinTime: "",
@@ -348,9 +403,7 @@ export default {
         journalName: [
           { required: true, message: "请输入杂志名称", trigger: "blur" }
         ],
-        journalImg: [
-          { required: false, message: "请选择杂志封面", trigger: "change" }
-        ],
+        jimg: [{ required: true, message: "请选择杂志封面", trigger: "blur" }],
         author: [
           { required: true, message: "请输入作者名称", trigger: "blur" }
         ],
@@ -371,7 +424,7 @@ export default {
           { required: true, trigger: "blur", validator: validateNumber }
         ],
         cn: [{ required: true, validator: validateCN, trigger: "blur" }],
-        isbn: [{ required: true, validator:validateIsbn, trigger: "blur" }],
+        isbn: [{ required: true, validator: validateIsbn, trigger: "blur" }],
         issn: [{ required: true, validator: validateIssn, trigger: "blur" }],
         publicationCycle: [
           { required: true, message: "请选择出版周期", trigger: "change" }
@@ -392,10 +445,10 @@ export default {
           { required: true, message: "请选择杂志语言", trigger: "change" }
         ],
         foreignCodes: [
-          { required: true, validator:validateForeignCodes, trigger: "blur" }
+          { required: true, validator: validateForeignCodes, trigger: "blur" }
         ],
         domesticCode: [
-          { required: true, validator:validateDomesticCode, trigger: "blur" }
+          { required: true, validator: validateDomesticCode, trigger: "blur" }
         ],
         format: [{ required: true, message: "请选择开本", trigger: "change" }],
         pageNumber: [
@@ -584,6 +637,8 @@ export default {
       if (!isLt500K) {
         this.$message.error("上传头像图片大小不能超过500k!");
         this.$refs.upload.clearFiles();
+      } else {
+        this.addFormValue.jimg = file.name;
       }
     },
     handleChange2(file, fileList) {
@@ -595,7 +650,11 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       //console.log(res);
-      this.imgUrl = res.str;
+      this.$refs.upload.clearFiles();
+      this.addFormValue.jimg = "";
+    },
+    handleAvatarSuccess2(res, file) {
+      this.$refs.upload2.clearFiles();
     },
     beforeAvatarUpload(file) {
       const isLt500K = file.size / 1024 / 1024 < 0.5;
@@ -605,6 +664,7 @@ export default {
       return isLt500K;
     },
     handleRemove(file, fileList) {
+      this.addFormValue.jimg = "";
       console.log(file, fileList);
     },
     handlePreview(file) {
@@ -642,6 +702,23 @@ export default {
             });
         } else {
           this.$refs.addform.clearValidate();
+        }
+      }
+    },
+    "addFormValue.isForeign": {
+      handler(newValue) {
+        if (newValue == true) {
+          this.addRules.publishingArea = {
+            required: false,
+            message: "请选择地区",
+            trigger: "change"
+          };
+        } else {
+          this.addRules.publishingArea = {
+            required: true,
+            message: "请选择地区",
+            trigger: "change"
+          };
         }
       }
     }

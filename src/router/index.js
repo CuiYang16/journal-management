@@ -78,6 +78,20 @@ export const constantRoutes = [
         meta: { title: 'journalType', icon: 'table', noCache: true ,role: ['admin','editor']}
       }
     ]
+  },
+  // 杂志书展管理
+  {
+    path: '/fair',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '/journalFair',
+        component: () => import('@/views/journalFair/index'),
+        name: 'JournalFair',
+        meta: { title: 'journalFair', icon: 'table', noCache: true ,role: ['admin','editor']}
+      }
+    ]
   }
 ]
 
