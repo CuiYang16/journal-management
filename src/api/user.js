@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+//登录
 export function login(userLogin) {
   return request({
     url: '/jm-user/user/login',
@@ -8,6 +9,7 @@ export function login(userLogin) {
   })
 }
 
+//获取权限角色信息
 export function getInfo(token) {
   return request({
     url: '/jm-user/user/get-info',
@@ -15,12 +17,21 @@ export function getInfo(token) {
     params: { token }
   })
 }
-
-export function logout(token) {
+//退出登录
+export function getUsers(pageNum, pageSize) {
   return request({
-    url: '/jm-user/user/logout',
-    method: 'post',
-    data:{token}
+    url: '/jm-user/user/get-users',
+    method: 'get',
+    params:{pageNum, pageSize}
+  })
+}
+
+//获取权限角色
+export function getRoles(token) {
+  return request({
+    url: '/jm-user/user/get-role',
+    method: 'get',
+    params: { token }
   })
 }
 

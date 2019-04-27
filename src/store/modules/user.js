@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from "@/api/user";
+import { login, getInfo } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import router, { resetRouter } from "@/router";
 
@@ -37,6 +37,7 @@ const actions = {
         .then(response => {
           commit("SET_TOKEN", response.token);
           setToken(response.token);
+         
           resolve();
         })
         .catch(error => {
@@ -50,8 +51,14 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token)
         .then(response => {
-          const { list } = response;
-
+          const { list, val } = response;
+          if (val === 0) {
+            commit("SET_TOKEN", "");
+            commit("SET_ROLES", []);
+            removeToken();
+            resetRouter();
+            resolve();
+          }
           if (!list) {
             reject("Verification failed, please Login again.");
           }
@@ -62,11 +69,9 @@ const actions = {
           if (!list || list.length <= 0) {
             reject("getInfo: roles must be a non-null array!");
           }
-
+          commit("SET_AVATAR", require("E:/img/" + response.avatar));
           commit("SET_ROLES", list);
-          // commit('SET_NAME', name)
-          // commit('SET_AVATAR', avatar)
-          // commit('SET_INTRODUCTION', introduction)
+          commit("SET_NAME", response.userName);
 
           resolve(list);
         })
@@ -79,19 +84,11 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token)
-        .then(response => {
-          if (response.val == 1) {
-            commit("SET_TOKEN", "");
-            commit("SET_ROLES", []);
-            removeToken();
-            resetRouter();
-            resolve();
-          }
-        })
-        .catch(error => {
-          reject(error);
-        });
+      commit("SET_TOKEN", "");
+      commit("SET_ROLES", []);
+      removeToken();
+      resetRouter();
+      resolve()
     });
   },
 
