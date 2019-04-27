@@ -3,7 +3,8 @@ export default {
     dashboard: '首页',
     journalDetail: '杂志管理',
     journalType:"杂志类型管理",
-    journalFair:"杂志书展管理"
+    journalFair:"杂志书展管理",
+    slideShow:"首页轮播图管理"
   },
   navbar: {
     logOut: '退出登录',

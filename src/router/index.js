@@ -92,6 +92,20 @@ export const constantRoutes = [
         meta: { title: 'journalFair', icon: 'table', noCache: true ,role: ['admin','editor']}
       }
     ]
+  },
+  //轮播图管理
+  {
+    path: '/slide',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: '/slideShow',
+        component: () => import('@/views/slideShow/index'),
+        name: 'SlideShow',
+        meta: { title: 'slideShow', icon: 'table', noCache: true ,role: ['admin','editor']}
+      }
+    ]
   }
 ]
 
