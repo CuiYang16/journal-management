@@ -2,7 +2,7 @@
   <div id="journal">
     <div class="header">
       <el-row type="flex" :gutter="0" justify="end">
-        <ElCol :span="10">
+        <ElCol :span="11">
           <div class="checkbox-group">
             <el-checkbox
               label="可借阅状态"

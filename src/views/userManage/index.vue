@@ -1,5 +1,18 @@
 <template>
   <div class="user-manage" id="user-manage">
+    <div>
+      <el-button-group style="float:right;">
+        <el-button type="danger" size="small" icon="el-icon-delete">批量删除</el-button>
+
+        <el-button
+          size="small"
+          icon="el-icon-plus"
+          type="primary"
+          style="margin-bottom:3px;"
+          @click="addUser"
+        >添加用户</el-button>
+      </el-button-group>
+    </div>
     <div class="data-table">
       <el-table
         :data="tableData"
@@ -53,7 +66,20 @@
         ></el-table-column>
         <el-table-column label="用户邮箱" prop="userEmail" align="center" show-overflow-tooltip></el-table-column>
         <el-table-column label="联系方式" prop="userPhone" align="center" show-overflow-tooltip></el-table-column>
-        <el-table-column label="最后登录" prop="lastLoginTime" align="center" show-overflow-tooltip :formatter="dateFormat"></el-table-column>
+        <el-table-column
+          label="最后登录"
+          prop="lastLoginTime"
+          align="center"
+          show-overflow-tooltip
+          :formatter="dateFormat"
+        ></el-table-column>
+        <el-table-column label="已删除" prop="isDelete" align="center">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.isDelete==false?'danger':'success'"
+            >{{scope.row.isDelete==false?"否":"是"}}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template class="templateClass" slot-scope="scope">
             <el-button type="text">重置密码</el-button>
@@ -67,74 +93,56 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="page-group">
+      <template>
+        <div class="block">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageInfo.currentPage"
+            :page-sizes="[10, 20, 30, 40,50]"
+            :page-size="pageInfo.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageInfo.total"
+          ></el-pagination>
+        </div>
+      </template>
+    </div>
+    <div>
+      <add-user-dialog
+        ref="addDialog"
+        :addUserValue="addUserValue"
+        @addUserSubmit="addUserSubmit"
+      ></add-user-dialog>
+    </div>
+    <el-tooltip placement="top" content="回到顶部">
+      <back-to-top
+        :custom-style="myBackToTopStyle"
+        :visibility-height="150"
+        :back-position="50"
+        transition-name="fade"
+      />
+    </el-tooltip>
   </div>
 </template>
 
 <script>
-import { getUsers, getRoles } from "@/api/user";
+import { getUsers, getRoles, createUser, validatorUserName } from "@/api/user";
 import { getToken } from "@/utils/auth";
+import BackToTop from "@/components/BackToTop";
+import AddUserDialog from "./components/addDialog";
 
 export default {
+  components: {
+    AddUserDialog,
+    BackToTop
+  },
   data() {
     return {
-      tableData: [
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9",
-          roles: [],
-          permiassion: []
-        },
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9"
-        },
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9"
-        },
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9"
-        },
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9"
-        },
-        {
-          userId: "12987122",
-          userName: "好滋好味鸡蛋仔",
-          userPhone: "13800000000",
-          userEmail: "12345678@qq.com",
-          userSex: "1",
-          userHeadPortrait: "e1cf12c07bf6458992569e67927d767e.png",
-          lastLoginTime: "2018-9-9"
-        }
-      ],
+      tableData: [],
+      addUserValue: {
+        addDialogVisible: false
+      },
       pageInfo: {
         currentPage: 1,
         pageSize: 10,
@@ -143,6 +151,15 @@ export default {
         isLastPage: false,
         size: 0,
         pages: 1
+      },
+      myBackToTopStyle: {
+        right: "0px",
+        bottom: "50px",
+        width: "30px",
+        height: "30px",
+        "border-radius": "4px",
+        "line-height": "40px", // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+        background: "#e7eaf1" // 按钮的背景颜色 The background color of the button
       }
     };
   },
@@ -160,7 +177,7 @@ export default {
             this.pageInfo.size = res.pageInfo.size;
             this.pageInfo.pages = res.pageInfo.pages;
             this.tableData.forEach(t => {
-              getRoles(getToken())
+              getRoles(t.userId)
                 .then(res => {
                   if (res.val != 0) {
                     this.$set(t, "role", res.list);
@@ -183,7 +200,50 @@ export default {
           });
         });
     },
+    addUser() {
+      this.addUserValue.addDialogVisible = !this.addUserValue.addDialogVisible;
+    },
+    addUserSubmit(user) {
+      this.addUserValue.addDialogVisible = !this.addUserValue.addDialogVisible;
+      createUser(user)
+        .then(res => {
+          if (res.val != 0) {
+            this.$refs.addDialog.userData.userId = res.val;
+            this.$refs.addDialog.$refs.uploadAvatar.submit();
+            this.$notify({
+              title: "成功",
 
+              message: "添加用户成功",
+              type: "success"
+            });
+            this.getAllUser(1, this.pageInfo.pageSize);
+
+            this.$nextTick(function() {
+              this.$refs.addDialog.$refs.addUserForm.resetFields();
+              this.$refs.addDialog.$refs.uploadAvatar.clearFiles();
+            });
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: "创建用户失败，请刷新重试"
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$notify.error({
+            title: "错误",
+            message: "创建用户失败，请刷新重试"
+          });
+        });
+    },
+
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
     expandChange(row, expandedRows) {
       let expandFlag = expandedRows.indexOf(row);
       if (expandFlag != -1) {
@@ -229,6 +289,11 @@ export default {
 }
 #user-manage .el-table {
   font-size: 13px;
+}
+
+#user-manage .page-group {
+  float: right;
+  margin: 5px 10px 0 0;
 }
 .demo-table-expand {
   font-size: 0;

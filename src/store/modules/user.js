@@ -52,13 +52,7 @@ const actions = {
       getInfo(state.token)
         .then(response => {
           const { list, val } = response;
-          if (val === 0) {
-            commit("SET_TOKEN", "");
-            commit("SET_ROLES", []);
-            removeToken();
-            resetRouter();
-            resolve();
-          }
+          
           if (!list) {
             reject("Verification failed, please Login again.");
           }

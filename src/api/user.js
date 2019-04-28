@@ -27,11 +27,36 @@ export function getUsers(pageNum, pageSize) {
 }
 
 //获取权限角色
-export function getRoles(token) {
+export function getRoles(userId) {
   return request({
     url: '/jm-user/user/get-role',
     method: 'get',
-    params: { token }
+    params: { userId }
   })
 }
 
+//获取所有权限角色
+export function getAllRoles() {
+  return request({
+    url: '/jm-user/user/get-roles',
+    method: 'get',
+  })
+}
+
+//创建用户
+export function createUser(user) {
+  return request({
+    url: '/jm-user/user/insert-user',
+    method: 'post',
+    data:{user}
+  })
+}
+
+//创建用户
+export function validatorUserName(userName) {
+  return request({
+    url: '/jm-user/user/validator-username',
+    method: 'get',
+    params:{userName}
+  })
+}
