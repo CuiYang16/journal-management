@@ -1,35 +1,43 @@
 <template>
   <div>
     <el-dialog
-      title="添加用户"
-      :visible.sync="addUserValue.addDialogVisible"
+      title="编辑用户"
+      :visible.sync="editUserValue.editDialogVisible"
       :close-on-click-modal="false"
     >
-      <el-form :model="addUserForm" ref="addUserForm" :rules="addUserRule">
+      <el-form :model="editUserValue.editFormValue" ref="editUserForm">
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="userName">
-          <el-input v-model="addUserForm.userName" autocomplete="off"></el-input>
+          <el-input v-model="editUserValue.editFormValue.userName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth" prop="userSex">
-          <el-radio-group v-model="addUserForm.userSex">
+          <el-radio-group v-model="editUserValue.editFormValue.userSex">
             <el-radio :label="true">男</el-radio>
             <el-radio :label="false">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth" prop="userPwd">
-          <el-input v-model="addUserForm.userPwd" autocomplete="off" show-password></el-input>
+          <el-input v-model="editUserValue.editFormValue.userPwd" autocomplete="off" show-password></el-input>
         </el-form-item>
         <el-form-item label="确认密码" :label-width="formLabelWidth" prop="confirmPwd">
-          <el-input v-model="addUserForm.confirmPwd" autocomplete="off" show-password></el-input>
+          <el-input
+            v-model="editUserValue.editFormValue.confirmPwd"
+            autocomplete="off"
+            show-password
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系电话" :label-width="formLabelWidth" prop="userPhone">
-          <el-input v-model="addUserForm.userPhone" autocomplete="off"></el-input>
+          <el-input v-model="editUserValue.editFormValue.userPhone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="用户邮箱" :label-width="formLabelWidth" prop="userEmail">
-          <el-input v-model="addUserForm.userEmail" autocomplete="off"></el-input>
+          <el-input v-model="editUserValue.editFormValue.userEmail" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="用户头像" :label-width="formLabelWidth" prop="userHeadPortrait">
-          <el-input v-model="addUserForm.userHeadPortrait" autocomplete="off" style="display:none;"></el-input>
+          <el-input
+            v-model="editUserValue.editFormValue.userHeadPortrait"
+            autocomplete="off"
+            style="display:none;"
+          ></el-input>
 
           <el-upload
             class="upload-demo"
@@ -50,9 +58,11 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/jpeg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
-
+        <el-form-item label="去激活" :label-width="formLabelWidth" prop="isDelete">
+          <el-switch v-model="editUserValue.editFormValue.isDelete"></el-switch>
+        </el-form-item>
         <el-form-item label="用户角色" :label-width="formLabelWidth" prop="roles">
-          <el-select v-model="addUserForm.roles" multiple placeholder="请选择">
+          <el-select v-model="editUserValue.editFormValue.roles" multiple placeholder="请选择">
             <el-option
               v-for="item in roleOptions"
               :key="item.roleId"
@@ -61,14 +71,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
-        <el-form-item label="去激活" :label-width="formLabelWidth" prop="isDelete">
-          <el-switch v-model="addUserForm.isDelete" :disabled="true"></el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addUserValue.addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addUserSubmit">确 定</el-button>
+        <el-button @click="editUserValue.editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editUserSubmit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -78,7 +84,7 @@
 import { getAllRoles, validatorUserName } from "@/api/user";
 
 export default {
-  props: ["addUserValue"],
+  props: ["editUserValue"],
 
   data() {
     const validateUserName = (rule, value, callback) => {
@@ -107,7 +113,10 @@ export default {
     };
     const validateConfirmPwd = (rule, value, callback) => {
       var pPattern = /^.*(?=.{8,12})(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*?_]).*$/;
-      if (!pPattern.test(value) || this.addUserForm.userPwd != value) {
+      if (
+        !pPattern.test(value) ||
+        this.editUserValue.editFormValue.userPwd != value
+      ) {
         callback(new Error("密码不一致，请重新确认！"));
       } else {
         callback();
@@ -133,19 +142,7 @@ export default {
       userData: { userId: "" },
       imageUrl: "",
       formLabelWidth: "100px",
-      addDialogVisible: false,
-      addUserForm: {
-        userName: "",
-        userPwd: "abc_123456",
-        confirmPwd: "abc_123456",
-        userPhone: "",
-        userEmail: "",
-        userSex: "",
-        userHeadPortrait: "",
-        isDelete: false,
-        roles: []
-      },
-      addUserRule: {
+      editUserRule: {
         userName: [
           { required: true, validator: validateUserName, trigger: "blur" }
         ],
@@ -175,15 +172,16 @@ export default {
     };
   },
   methods: {
-    addUserSubmit() {
-      this.$refs["addUserForm"].validate(valid => {
+    editUserSubmit() {
+      this.$refs["editUserForm"].validate(valid => {
         if (valid) {
-          this.$emit("addUserSubmit", Object.assign({}, this.addUserForm));
-
+          this.$emit(
+            "editUserSubmit",
+            Object.assign({}, this.editUserValue.editFormValue)
+          );
           this.$nextTick(function() {
-            this.$refs.addUserForm.resetFields();
-
-          });
+             // this.$refs.uploadAvatar.clearFiles();
+            });
         } else {
           this.$notify.error({
             title: "错误",
@@ -198,7 +196,7 @@ export default {
         this.$message.error("上传头像图片大小不能超过 500k!");
         this.$refs.uploadAvatar.clearFiles();
       } else {
-        this.addUserForm.userHeadPortrait = file.name;
+        this.editUserValue.editFormValue.userHeadPortrait = file.name;
         if (fileList.length == 1) {
           this.uploadBtn = false;
         }
@@ -207,7 +205,7 @@ export default {
     handleRemove(file, fileList) {
       if (fileList.length == 0) {
         this.uploadBtn = true;
-        this.addUserForm.userHeadPortrait = "";
+        this.editUserValue.editFormValue.userHeadPortrait = "";
       }
     },
     handleAvatarSuccess(res, file) {
@@ -217,11 +215,6 @@ export default {
           title: "错误",
           message: res.str
         });
-      } else {
-  
-          this.$refs.uploadAvatar.clearFiles();
-          this.uploadBtn = true;
-    
       }
     },
     beforeAvatarUpload(file) {
@@ -233,11 +226,26 @@ export default {
     }
   },
   watch: {
-    "addUserValue.addDialogVisible": {
+    "editUserValue.editDialogVisible": {
       handler(newValue) {
         if (newValue == false) {
-          this.$refs.addUserForm.clearValidate();
+          this.$refs.editUserForm.clearValidate();
         } else {
+          this.fileList = [];
+
+          this.editUserValue.editFormValue.roles = this.editUserValue.editFormValue.roles.map(
+            x => {
+              return x.roleId;
+            }
+          );
+          if (this.editUserValue.editFormValue.userHeadPortrait != null) {
+            this.fileList.push({
+              name: this.editUserValue.editFormValue.userHeadPortrait,
+              url: require("E:/img/" +
+                this.editUserValue.editFormValue.userHeadPortrait)
+            });
+            this.uploadBtn = false;
+          }
           getAllRoles()
             .then(res => {
               if (res.list.length > 0) {

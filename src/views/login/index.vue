@@ -88,7 +88,7 @@ export default {
     return {
       loginForm: {
         userName: "admin",
-        userPwd: "c111111_"
+        userPwd: "abc_123456"
       },
       loginRules: {
         userName: [

@@ -18,11 +18,11 @@ export function getInfo(token) {
   })
 }
 //退出登录
-export function getUsers(pageNum, pageSize) {
+export function getUsers(pageNum, pageSize,isDel) {
   return request({
     url: '/jm-user/user/get-users',
     method: 'get',
-    params:{pageNum, pageSize}
+    params:{pageNum, pageSize,isDel}
   })
 }
 
@@ -60,3 +60,58 @@ export function validatorUserName(userName) {
     params:{userName}
   })
 }
+
+//重置密码
+export function resetUserPwd(userId) {
+  return request({
+    url: '/jm-user/user/reset-pwd',
+    method: 'put',
+    data:{userId}
+  })
+}
+
+//重置密码
+export function updateUser(user) {
+  return request({
+    url: '/jm-user/user/update-user',
+    method: 'put',
+    data:{user}
+  })
+}
+
+//去激活
+export function delUpdateUser(userId) {
+  return request({
+    url: '/jm-user/user/update-del',
+    method: 'put',
+    data:{userId}
+  })
+}
+
+//删除
+export function delUser(userId) {
+  return request({
+    url: '/jm-user/user/del-user',
+    method: 'delete',
+    data:{userId}
+  })
+}
+
+//批量去激活
+export function delUpdateMulUser(delIds) {
+  return request({
+    url: '/jm-user/user/update-muldel',
+    method: 'put',
+    data:{delIds}
+  })
+}
+
+//批量删除
+export function delMulUser(delIds) {
+  return request({
+    url: '/jm-user/user/muldel-user',
+    method: 'delete',
+    data:{delIds}
+  })
+}
+

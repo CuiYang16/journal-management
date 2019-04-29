@@ -105,7 +105,7 @@ export default {
         if (res.list.length > 0) {
           res.list.forEach(l => {
             this.fileList.push({
-              slideId: l.slideId,
+
               name: l.name,
               url: require("E:/img/" + l.name)
             });
