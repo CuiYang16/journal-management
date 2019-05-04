@@ -5,7 +5,8 @@ export default {
     journalType:"杂志类型管理",
     journalFair:"杂志书展管理",
     slideShow:"首页轮播图管理",
-    userManage:"用户管理"
+    userManage:"用户管理",
+    journalBorrow:"借阅管理"
   },
   navbar: {
     logOut: '退出登录',

@@ -107,7 +107,7 @@
           align="center"
         ></el-table-column>
 
-        <el-table-column label="已删除" prop="isDelete" align="center">
+        <el-table-column label="去激活" prop="isDelete" align="center">
           <template slot-scope="scope">
             <el-tag
               :type="scope.row.isDelete==false?'danger':'success'"
@@ -125,9 +125,9 @@
                   @click="handleDownload(scope.row.fairName)"
                 >导出excel</el-button>
               </div>
-              <el-table :data="userFairData" element-loading-text="拼命加载中" v-loading="listLoading">
-                <el-table-column width="90" property="userName" label="姓名"></el-table-column>
-                <el-table-column width="150" property="userPhone" label="电话"></el-table-column>
+              <el-table :data="scope.row.fairUsers.users" element-loading-text="拼命加载中" v-loading="listLoading">
+                <el-table-column width="90" prop="userName" label="姓名"></el-table-column>
+                <el-table-column width="150" prop="userPhone" label="电话"></el-table-column>
               </el-table>
               <el-button slot="reference" type="text">查看用户</el-button>
             </el-popover>
@@ -326,8 +326,8 @@ export default {
         });
     },
     checkChange() {
-      this.isDeleteValue=2;
-      this.overdueValue=2;
+      this.isDeleteValue = 2;
+      this.overdueValue = 2;
       if (this.checkList.indexOf("1") >= 0) {
         this.isDeleteValue = 1;
       }
@@ -366,7 +366,7 @@ export default {
         .catch(error => {
           this.$notify.error({
             title: "失败",
-            duration: 4500,
+
             message: "更新书展信息失败！"
           });
         });
@@ -397,7 +397,7 @@ export default {
         .catch(error => {
           this.$notify.error({
             title: "失败",
-            duration: 4500,
+
             message: "更新书展信息失败！"
           });
         });
@@ -412,7 +412,7 @@ export default {
         );
         this.$notify({
           title: "成功",
-          duration: 3500,
+
           message: "操作成功！",
           type: "success"
         });
@@ -430,7 +430,7 @@ export default {
         );
         this.$notify({
           title: "成功",
-          duration: 3500,
+
           message: "操作成功！",
           type: "success"
         });
@@ -470,30 +470,30 @@ export default {
                 this.$refs.multipleTable.clearSelection();
                 this.$notify({
                   title: "成功",
-                  duration: 3500,
-                  message: "批量修改删除状态成功!",
+
+                  message: "批量去激活成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 4500,
-                  message: "批量修改删除状态失败，请刷新重试"
+
+                  message: "批量去激活失败，请刷新重试"
                 });
               }
             })
             .catch(error => {
               this.$notify.error({
                 title: "失败",
-                duration: 4500,
-                message: "批量修改删除状态失败，请刷新重试"
+
+                message: "批量去激活失败，请刷新重试"
               });
             });
         } else {
           if (this.delRow.isDelete) {
             this.$notify.error({
               title: "失败",
-              duration: 4500,
+
               message: "此条信息已是删除状态！"
             });
             return;
@@ -510,23 +510,23 @@ export default {
 
                 this.$notify({
                   title: "成功",
-                  duration: 3500,
-                  message: "修改删除状态成功!",
+
+                  message: "去激活成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 4500,
-                  message: "修改删除状态失败，请刷新重试"
+
+                  message: "去激活失败，请刷新重试"
                 });
               }
             })
             .catch(error => {
               this.$notify.error({
                 title: "失败",
-                duration: 4500,
-                message: "修改删除状态失败，请刷新重试"
+
+                message: "去激活失败，请刷新重试"
               });
             });
         }
@@ -550,23 +550,23 @@ export default {
                 this.multipleSelectionAll = [];
                 this.$notify({
                   title: "成功",
-                  duration: 3500,
-                  message: "批量修改删除状态成功!",
+
+                  message: "批量删除成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 4500,
-                  message: "批量修改删除状态失败，请刷新重试"
+
+                  message: "批量删除失败，请刷新重试"
                 });
               }
             })
             .catch(error => {
               this.$notify.error({
                 title: "失败",
-                duration: 4500,
-                message: "批量修改删除状态失败，请刷新重试"
+
+                message: "批量删除失败，请刷新重试"
               });
             });
         } else {
@@ -590,23 +590,23 @@ export default {
                 }
                 this.$notify({
                   title: "成功",
-                  duration: 3500,
-                  message: "修改删除状态成功!",
+
+                  message: "删除成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  duration: 4500,
-                  message: "修改删除状态失败，请刷新重试"
+
+                  message: "删除失败，请刷新重试"
                 });
               }
             })
             .catch(error => {
               this.$notify.error({
                 title: "失败",
-                duration: 4500,
-                message: "修改删除状态失败，请刷新重试"
+
+                message: "删除失败，请刷新重试"
               });
             });
         }

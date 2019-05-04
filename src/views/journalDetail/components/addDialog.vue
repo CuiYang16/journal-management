@@ -208,7 +208,11 @@
           ></el-cascader>
         </el-form-item>
 
-        <el-form-item label="是否可借阅" :label-width="formLabelWidth" prop="isBorrow">
+        <el-form-item label="库存量" :label-width="formLabelWidth" prop="inventory">
+          <el-input-number v-model="addFormValue.inventory" controls-position="right" :min="0"></el-input-number>
+        </el-form-item>
+
+        <el-form-item label="是否可借阅" :label-width="formLabelWidth" prop="inventory">
           <el-switch v-model="addFormValue.isBorrow"></el-switch>
         </el-form-item>
 
@@ -397,7 +401,8 @@ export default {
         description: "",
         isDelete: false,
         typeId: "",
-        journalType: []
+        journalType: [],
+        inventory: ""
       },
       addRules: {
         journalName: [
@@ -454,6 +459,9 @@ export default {
         pageNumber: [
           { required: true, validator: validateNumber, trigger: "blur" }
         ],
+        inventory:[{
+          required: true, message: "请输入库存量", trigger: "change"
+        }],
         isBorrow: [
           { required: true, message: "请选择是否可借阅", trigger: "change" }
         ],
@@ -624,6 +632,7 @@ export default {
           this.$emit("addSubmit", this.addFormValue);
           return true;
         } else {
+          this.$message.error('请按提示正确填写信息！');
           return false;
         }
       });

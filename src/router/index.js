@@ -165,6 +165,26 @@ export const asyncRoutes = [
       }
     ]
   },
+  //借阅管理
+  {
+    path: "/borrow",
+    component: Layout,
+    redirect: "dashboard",
+    meta: { roles: ["admin", "editor"] },
+    children: [
+      {
+        path: "/journalBorrow",
+        component: () => import("@/views/journalBorrow/index"),
+        name: "JournalBorrow",
+        meta: {
+          title: "journalBorrow",
+          icon: "user",
+          noCache: true,
+          roles: ["admin", "editor"]
+        }
+      }
+    ]
+  },
   { path: "*", redirect: "/404", hidden: true }
 ];
 

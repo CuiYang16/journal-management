@@ -210,7 +210,7 @@
         <el-table-column label="期号" prop="issue" align="center" ></el-table-column>
 
         <el-table-column label="杂志级别" prop="journalLevel" align="center" :formatter="journalLevelFormmatter"></el-table-column>
-
+        <el-table-column label="库存" prop="inventory" align="center" ></el-table-column>
         <el-table-column label="已删除" prop="isDelete" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.isDelete==false?'danger':'success'">{{scope.row.isDelete==false?"否":"是"}}</el-tag> 

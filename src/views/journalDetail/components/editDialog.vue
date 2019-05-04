@@ -223,6 +223,14 @@
           ></el-cascader>
         </el-form-item>
 
+        <el-form-item label="库存量" :label-width="formLabelWidth" prop="inventory">
+          <el-input-number
+            v-model="editDialogValue.editValue.inventory"
+            controls-position="right"
+            :min="0"
+          ></el-input-number>
+        </el-form-item>
+
         <el-form-item label="是否可借阅" :label-width="formLabelWidth" prop="isBorrow">
           <el-switch v-model="editDialogValue.editValue.isBorrow"></el-switch>
         </el-form-item>
@@ -437,6 +445,9 @@ export default {
         pageNumber: [
           { required: true, validator: validateNumber, trigger: "blur" }
         ],
+        inventory:[{
+          required: true, message: "请输入库存量", trigger: "change"
+        }],
         isBorrow: [
           { required: true, message: "请选择是否可借阅", trigger: "change" }
         ],
@@ -685,7 +696,7 @@ export default {
           if (journalImg != null && journalImg != "") {
             this.fileList.push({
               name: journalImg,
-              url: require("E:/img/" + journalImg)
+              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" + journalImg)
             });
           }
 
@@ -693,7 +704,7 @@ export default {
             this.editDialogValue.editValue.journalImages.forEach(j => {
               this.fileList2.push({
                 name: j.name,
-                url: require("E:/img/" + j.name)
+                url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" + j.name)
               });
             });
           }

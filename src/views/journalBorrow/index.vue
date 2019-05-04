@@ -1,99 +1,130 @@
 <template>
-  <div class="user-manage" id="user-manage">
-    <div>
-<el-row type="flex" :gutter="0" justify="end">
-        <el-col :span="2">
-          <div style="margin-top:10px;">
-          <el-checkbox v-model="isDel" @change="checkChange">去激活</el-checkbox>
+  <div class="journal-borrow">
+    <div class="header">
+      <el-row type="flex" :gutter="0" justify="end">
+        <ElCol :span="17">
+          <el-select
+            v-model="search"
+            filterable
+            placeholder="请选择查找用户"
+            clearable
+            size="mini"
+            allow-create
+            @visible-change="visibleChange"
+            @change="handelSelectChange"
+          >
+            <el-option
+              v-for="item in userValue"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            ></el-option>
+          </el-select>
+          <div class="checkbox-group">
+            <el-checkbox-group v-model="checkList" @change="checkChange">
+              <el-checkbox label="1" :disabled="checkList.indexOf('2')>=0">已逾期</el-checkbox>
+              <el-checkbox label="2" :disabled="checkList.indexOf('1')>=0">未逾期</el-checkbox>
+              <el-checkbox label="3" :disabled="checkList.indexOf('4')>=0">已归还，有罚金且已缴纳</el-checkbox>
+              <el-checkbox label="4" :disabled="checkList.indexOf('3')>=0">已归还，有罚金未缴纳</el-checkbox>
+            </el-checkbox-group>
           </div>
-        </el-col>
+        </ElCol>
+
         <el-col :span="5">
           <el-button-group style="float:right;">
-        <el-button
-          type="danger"
-          size="small"
-          icon="el-icon-delete"
-          @click="delMulUser"
-          :disabled="multipleBtnVisible"
-        >批量删除</el-button>
+            <el-button
+              type="danger"
+              size="small"
+              icon="el-icon-delete"
+              :disabled="multipleBtnVisible"
+              @click="delBorrowMul"
+            >批量删除</el-button>
 
-        <el-button
-          size="small"
-          icon="el-icon-plus"
-          type="primary"
-          style="margin-bottom:3px;"
-          @click="addUser"
-        >添加用户</el-button>
-      </el-button-group>
+            <el-button
+              size="small"
+              icon="el-icon-plus"
+              type="primary"
+              style="margin-bottom:3px;"
+              @click="addBorrow"
+            >新添借阅</el-button>
+          </el-button-group>
         </el-col>
-</el-row>
-      
+      </el-row>
     </div>
-    <div class="data-table">
+    <div class="borrow-table">
       <el-table
         ref="multipleTable"
         :data="tableData"
         style="width: 100%"
         size="mini"
-        @expand-change="expandChange"
-        :highlight-current-row="true"
+        highlight-current-row
         @selection-change="handleSelectionChange"
         @select="handleSelection"
         @select-all="handleSelection"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column type="expand">
-          <template slot-scope="props">
+          <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="用户头像">
-                <el-popover placement="right" width="240" trigger="hover">
-                  <img
-                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.userHeadPortrait)"
-                    width="200"
-                    height="200"
-                  >
-                  <img
-                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.userHeadPortrait)"
-                    width="100"
-                    height="100"
-                    slot="reference"
-                  >
-                </el-popover>
+              <el-form-item label="借阅天数">
+                <span>已借阅{{scope.row.realityDays==null?(realityDay(scope.row.borrowTime)):scope.row.realityDays}}天</span>
               </el-form-item>
-              <el-form-item label="用户角色">
-                <el-popover
-                  placement="top-start"
-                  title="标题"
-                  width="200"
-                  trigger="hover"
-                  content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-                  v-for="item in props.row.roles"
-                  :key="item.roleId"
-                >
-                  <el-tag slot="reference" style="margin-right:15px;">{{ item.roleName }}</el-tag>
-                </el-popover>
+              <el-form-item label="逾期天数">
+                <span>已逾期{{scope.row.overdueDays==0?(overDay(scope.row.returnTime)):scope.row.overdueDays}}天</span>
+              </el-form-item>
+              <el-form-item label="罚金">
+                <span>{{scope.row.penalty==0?(overDay(scope.row.returnTime)*0.5):scope.row.penalty}}元</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="ID" prop="userId" width="60"></el-table-column>
-        <el-table-column label="用户名" prop="userName" align="center" show-overflow-tooltip></el-table-column>
+        <el-table-column label="ID" prop="borrowId" width="55"></el-table-column>
         <el-table-column
-          label="用户性别"
-          prop="userSex"
-          align="center"
-          show-overflow-tooltip
-          :formatter="sexFormat"
-        ></el-table-column>
-        <el-table-column label="用户邮箱" prop="userEmail" align="center" show-overflow-tooltip></el-table-column>
-        <el-table-column label="联系方式" prop="userPhone" align="center" show-overflow-tooltip></el-table-column>
-        <el-table-column
-          label="最后登录"
-          prop="lastLoginTime"
-          align="center"
-          show-overflow-tooltip
+          label="借阅时间"
+          prop="borrowTime"
           :formatter="dateFormat"
+          width="100"
+          align="center"
         ></el-table-column>
+        <el-table-column
+          label="应归还时间"
+          prop="returnTime"
+          :formatter="dateFormat"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="实际归还时间"
+          prop="realityReturn"
+          :formatter="dateFormat"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="杂志名称" prop="journalName" show-overflow-tooltip align="center">
+          <template slot-scope="scope">{{scope.row.journalDetails.journalName}}</template>
+        </el-table-column>
+        <el-table-column label="借阅用户" prop="userName" show-overflow-tooltip align="center">
+          <template slot-scope="scope">{{scope.row.user.userName}}</template>
+        </el-table-column>
+
+        <el-table-column label="是否逾期" prop="isOverdue" align="center">
+          <template slot-scope="scope">
+            <div>
+              <el-tag
+                :type="scope.row.returnTime>=new Date()?'danger':'success'"
+              >{{scope.row.isOverdue==false?(scope.row.returnTime>new Date()?'否':'是'):scope.row.isOverdue==true?'是':'否'}}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否缴纳" prop="isPayment" align="center">
+          <template slot-scope="scope">
+            <div>
+              <el-tag
+                :type="scope.row.isPayment==false?'danger':'success'"
+              >{{scope.row.penalty>0?(scope.row.isPayment==false?'否':'是'):'--'}}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="去激活" prop="isDelete" align="center">
           <template slot-scope="scope">
             <el-tag
@@ -101,13 +132,16 @@
             >{{scope.row.isDelete==false?"否":"是"}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="180">
-          <template class="templateClass" slot-scope="scope">
-            <el-button type="text" @click="resetPwd(scope.row)">重置密码</el-button>
-            <el-button type="text" @click="editUser(scope.row)">
-              <i class="el-icon-edit-outline"></i>
-            </el-button>
-            <el-button type="text" @click="delUser(scope.row)">
+        <el-table-column align="center" width="180" label="操作">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              @click="payment(scope.row)"
+              :disabled="!(scope.row.realityReturn!=null&&(!scope.row.isPayment)&&scope.row.isOverdue)"
+            >缴纳罚金</el-button>
+            <el-button type="text" @click="returnJournal(scope.row)">归还杂志</el-button>
+
+            <el-button type="text" @click="deleteBorrow(scope.row)">
               <i class="el-icon-delete" style="color: red"></i>
             </el-button>
           </template>
@@ -129,20 +163,16 @@
         </div>
       </template>
     </div>
-    <div>
-      <add-user-dialog ref="addDialog" :addUserValue="addUserValue" @addUserSubmit="addUserSubmit"></add-user-dialog>
-      <edit-user-dialog
-        ref="editDialog"
-        :editUserValue="editUserValue"
-        @editUserSubmit="editUserSubmit"
-      ></edit-user-dialog>
 
-      <el-dialog title="删除用户信息" :visible.sync="delDialogVisible">
+    <div class="dialog-dialog">
+      <add-dialog ref="addBorrow" :addDialogValue="addDialogValue" @addSubmit="addSubmit"></add-dialog>
+      <return-dialog :returnDialogValue="returnDialogValue" @returnSubmit="returnSubmit"></return-dialog>
+      <el-dialog title="删除借阅信息" :visible.sync="delDialogVisible">
         <span>请选择删除方式：</span>
         <div style="margin-top:20px">
           <el-radio-group v-model="delType" size="small">
             <el-radio :label="0" border>彻底删除</el-radio>
-            <el-radio :label="1" border>去激活</el-radio>
+            <el-radio :label="1" border>改变已删除状态</el-radio>
           </el-radio-group>
         </div>
         <div slot="footer" class="dialog-footer">
@@ -163,43 +193,48 @@
 </template>
 
 <script>
-import {
-  getUsers,
-  getRoles,
-  createUser,
-  validatorUserName,
-  resetUserPwd,
-  updateUser,
-  delUpdateUser,
-  delUser,
-  delUpdateMulUser,
-  delMulUser
-} from "@/api/user";
-import { getToken } from "@/utils/auth";
 import BackToTop from "@/components/BackToTop";
-import AddUserDialog from "./components/addDialog";
-import EditUserDialog from "./components/editDialog";
+import {
+  getBorrows,
+  createBorrow,
+  returnJournal,
+  getUsers,
+  updatePayment,
+  delUpdate,
+  delBorrow,
+  delUpdateMul,
+  delBorrowMul
+} from "@/api/borrow.js";
+import AddDialog from "./components/addDialog";
+import ReturnDialog from "./components/returnDialog";
 
 export default {
   components: {
-    EditUserDialog,
-    AddUserDialog,
-    BackToTop
+    BackToTop,
+    AddDialog,
+    ReturnDialog
   },
   data() {
     return {
       tableData: [],
-      addUserValue: {
-        addDialogVisible: false
+      search: "",
+      addDialogValue: {
+        addFormVisible: false
       },
-      editUserValue: {
-        editDialogVisible: false,
-        editFormValue: {}
+      returnDialogValue: {
+        returnFormVisible: false,
+        overDay: "",
+        penalty: ""
       },
+      returnRow: {},
+      userValue: [],
+      checkList: [],
+      isOverdue: 2,
+      isPayment: 2,
+      delDialogVisible: false,
       delRow: {},
       delType: 1,
       delMul: false,
-      delDialogVisible: false,
       multipleSelection: [],
       multipleSelectionAll: [],
       multipleBtnVisible: true,
@@ -212,7 +247,6 @@ export default {
         size: 0,
         pages: 1
       },
-      isDel:false,
       myBackToTopStyle: {
         right: "0px",
         bottom: "50px",
@@ -225,37 +259,21 @@ export default {
     };
   },
   methods: {
-    getAllUser(pageNum, pageSize,isDel) {
-      getUsers(pageNum, pageSize,isDel)
+    getAllBorrow(currentPage, pageSize, userId, isOverdue, isPayment) {
+      getBorrows(currentPage, pageSize, userId, isOverdue, isPayment)
         .then(res => {
-          if (res.pageInfo.list.length > 0) {
-            this.tableData = res.pageInfo.list;
-            this.pageInfo.currentPage = res.pageInfo.pageNum;
-            this.pageInfo.pageSize = res.pageInfo.pageSize;
-            this.pageInfo.total = res.pageInfo.total;
-            this.pageInfo.isFirstPage = res.pageInfo.isFirstPage;
-            this.pageInfo.isLastPage = res.pageInfo.isLastPage;
-            this.pageInfo.size = res.pageInfo.size;
-            this.pageInfo.pages = res.pageInfo.pages;
-            this.tableData.forEach(t => {
-              getRoles(t.userId)
-                .then(res => {
-                  if (res.val != 0) {
-                    this.$set(t, "roles", res.list);
-                  }
-                })
-                .catch(error => {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "获取权限信息失败，请刷新重试"
-                  });
-                });
-            });
-            //调用必须加setTimeOut
-            setTimeout(() => {
-              this.toggleSelection();
-            }, 1);
-          }
+          this.tableData = res.pageInfo.list;
+          this.pageInfo.currentPage = res.pageInfo.pageNum;
+          this.pageInfo.pageSize = res.pageInfo.pageSize;
+          this.pageInfo.total = res.pageInfo.total;
+          this.pageInfo.isFirstPage = res.pageInfo.isFirstPage;
+          this.pageInfo.isLastPage = res.pageInfo.isLastPage;
+          this.pageInfo.size = res.pageInfo.size;
+          this.pageInfo.pages = res.pageInfo.pages;
+          //调用必须加setTimeOut
+          setTimeout(() => {
+            this.toggleSelection();
+          }, 1);
         })
         .catch(error => {
           console.log(error);
@@ -265,91 +283,127 @@ export default {
           });
         });
     },
-    addUser() {
-      this.addUserValue.addDialogVisible = !this.addUserValue.addDialogVisible;
+    addBorrow() {
+      this.addDialogValue.addFormVisible = true;
     },
-    addUserSubmit(user) {
-      this.addUserValue.addDialogVisible = !this.addUserValue.addDialogVisible;
-      user.userHeadPortrait = null;
-      createUser(user)
+    addSubmit(value) {
+      this.addDialogValue.addFormVisible = false;
+      createBorrow(value.userId, value.journalId)
         .then(res => {
-          if (res.val != 0) {
-            this.$refs.addDialog.userData.userId = res.val;
-            this.$refs.addDialog.$refs.uploadAvatar.submit();
+          if (res.val == 1) {
             this.$notify({
               title: "成功",
-
-              message: "添加用户成功",
+              message: "借阅成功",
               type: "success"
             });
 
-            setTimeout(() => {
-              this.getAllUser(1, this.pageInfo.pageSize,this.isDel);
-            }, 100);
-          } else {
+            this.getAllBorrow(
+              1,
+              this.pageInfo.pageSize,
+              this.search == "" ? 0 : this.search,
+              this.isOverdue,
+              this.isPayment
+            );
+          } else if (res.val == 50008) {
             this.$notify.error({
               title: "错误",
-              message: "创建用户失败，请刷新重试"
+              message:
+                "您有逾期罚金未按时缴纳，目前不能继续借阅，请缴纳罚金后继续借阅！"
             });
+          } else if (res.val == 50010) {
+            this.$notify.error({
+              title: "错误",
+              message:
+                "您在借杂志期刊数量达到10本，不得继续借阅，请归还后后继续借阅！"
+            });
+          }
+          this.$nextTick(function() {
+            this.$refs.addBorrow.$refs["borrowForm"].resetFields();
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          this.$notify.error({
+            title: "错误",
+            message: "借阅失败，请刷新重试！"
+          });
+        });
+    },
+    returnSubmit(isPayment) {
+      this.returnDialogValue.returnFormVisible = false;
+      returnJournal(this.returnRow, isPayment ? 1 : 0)
+        .then(res => {
+          if (res.val == 1) {
+            this.$notify({
+              title: "成功",
+              message: "归还成功",
+              type: "success"
+            });
+
+            this.getAllBorrow(
+              this.pageInfo.currentPage,
+              this.pageInfo.pageSize,
+              this.search == "" ? 0 : this.search,
+              this.isOverdue,
+              this.isPayment
+            );
           }
         })
         .catch(error => {
           console.log(error);
           this.$notify.error({
             title: "错误",
-            message: "创建用户失败，请刷新重试"
+            message: "归还失败，请刷新重试！"
           });
         });
     },
-    editUser(row) {
-      this.editUserValue.editDialogVisible = !this.editUserValue
-        .editDialogVisible;
-      this.editUserValue.editFormValue = Object.assign({}, row);
-    },
-    editUserSubmit(user) {
-      this.editUserValue.editDialogVisible = !this.editUserValue
-        .editDialogVisible;
-      user.userHeadPortrait = null;
-      updateUser(user)
-        .then(res => {
-          if (res != 0) {
-            this.$refs.editDialog.userData.userId = user.userId;
-            this.$refs.editDialog.$refs.uploadAvatar.submit();
-            this.$notify({
-              title: "成功",
-
-              message: "编辑用户成功",
-              type: "success"
-            });
-
-            setTimeout(() => {
-              this.getAllUser(
-                this.pageInfo.currentPage,
-                this.pageInfo.pageSize,this.isDel
-              );
-            }, 100);
-          } else {
-            this.$notify.error({
-              title: "错误",
-              message: "编辑用户失败，请刷新重试"
-            });
-          }
+    returnJournal(row) {
+      this.returnRow = row;
+      if (row.returnTime <= new Date()) {
+        this.returnDialogValue.overDay = this.overDay(row.returnTime);
+        this.returnDialogValue.penalty = this.overDay(row.returnTime) * 0.5;
+        this.returnDialogValue.returnFormVisible = true;
+      } else {
+        this.$confirm("请确认归还杂志期刊符合要求！", "确认信息", {
+          distinguishCancelAndClose: true,
+          confirmButtonText: "确认归还",
+          cancelButtonText: "取消"
         })
-        .catch(error => {
-          console.log(error);
-
-          this.$notify.error({
-            title: "错误",
-            message: "编辑用户失败，请刷新重试"
-          });
-        });
+          .then(() => {
+            this.returnSubmit(false);
+          })
+          .catch(action => {});
+      }
     },
-    delUser(row) {
+    payment(row) {
+      this.$confirm("请确认罚金数额！", "确认信息", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: "确认缴纳",
+        cancelButtonText: "取消"
+      })
+        .then(() => {
+          updatePayment(row.borrowId)
+            .then(res => {
+              if (res.val == 1) {
+                this.$set(row, "isPayment", true);
+                this.$notify({
+                  title: "成功",
+                  message: "缴纳罚金成功",
+                  type: "success"
+                });
+              }
+            })
+            .catch();
+        })
+        .catch(action => {});
+    },
+    deleteBorrow(row) {
       this.delMul = false;
+
       this.delRow = row;
       this.delDialogVisible = !this.delDialogVisible;
     },
-    delMulUser() {
+    delBorrowMul() {
       this.delMul = true;
       this.delDialogVisible = !this.delDialogVisible;
     },
@@ -358,15 +412,15 @@ export default {
       if (this.delMul) {
         let delIds = [];
         delIds = this.multipleSelectionAll.map(m => {
-          return m.userId;
+          return m.borrowId;
         });
         if (this.delType == 1) {
-          delUpdateMulUser(delIds)
+          delUpdateMul(delIds)
             .then(res => {
               if (res.val > 0) {
                 for (var t of this.tableData) {
                   for (var id of delIds) {
-                    if (t.userId == id) {
+                    if (t.borrowId == id) {
                       this.$set(t, "isDelete", true);
                       break;
                     }
@@ -376,14 +430,12 @@ export default {
                 this.$refs.multipleTable.clearSelection();
                 this.$notify({
                   title: "成功",
-                  
                   message: "批量去激活成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  
                   message: "批量去激活失败，请刷新重试"
                 });
               }
@@ -392,69 +444,69 @@ export default {
               console.log(error);
               this.$notify.error({
                 title: "失败",
-                
                 message: "批量去激活失败，请刷新重试"
               });
             });
-        } else if (this.delType == 0) {
-          delMulUser(delIds)
+        } else {
+          delBorrowMul(delIds)
             .then(res => {
               if (res.val > 0) {
-                this.getAllUser(1, this.pageInfo.pageSize,this.isDel);
+                this.getAllBorrow(
+                  1,
+                  this.pageInfo.pageSize,
+                  this.search == "" ? 0 : this.search,
+                  this.isOverdue,
+                  this.isPayment
+                );
                 this.multipleSelectionAll = [];
                 this.$notify({
                   title: "成功",
-                  
                   message: "批量删除成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  
                   message: "批量删除失败，请刷新重试"
                 });
               }
             })
             .catch(error => {
               console.log(error);
+
               this.$notify.error({
                 title: "失败",
-                
                 message: "批量删除失败，请刷新重试"
               });
             });
         }
       } else {
         if (this.delType == 1) {
-
           if (this.delRow.isDelete) {
             this.$notify.error({
               title: "失败",
-              
               message: "此条信息已是删除状态！"
             });
             return;
           }
-          delUpdateUser(this.delRow.userId)
+          delUpdate(this.delRow.borrowId)
             .then(res => {
               if (res.val == 1) {
                 for (var t of this.tableData) {
-                  if (t.userId == this.delRow.userId) {
+                  if (t.borrowId == this.delRow.borrowId) {
                     this.$set(t, "isDelete", true);
                     break;
                   }
                 }
+
                 this.$notify({
                   title: "成功",
-                  
                   message: "去激活成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  
                   message: "去激活失败，请刷新重试"
                 });
               }
@@ -464,28 +516,28 @@ export default {
 
               this.$notify.error({
                 title: "失败",
-                
                 message: "去激活失败，请刷新重试"
               });
             });
-        } else if (this.delType == 0) {
-          delUser(this.delRow.userId)
+        } else {
+          delBorrow(this.delRow.borrowId)
             .then(res => {
               if (res.val == 1) {
-                this.getAllUser(
+                this.getAllBorrow(
                   this.pageInfo.currentPage,
-                  this.pageInfo.pageSize,this.isDel
+                  this.pageInfo.pageSize,
+                  this.search == "" ? 0 : this.search,
+                  this.isOverdue,
+                  this.isPayment
                 );
                 this.$notify({
                   title: "成功",
-                  
                   message: "删除成功!",
                   type: "success"
                 });
               } else {
                 this.$notify.error({
                   title: "失败",
-                  
                   message: "删除失败，请刷新重试"
                 });
               }
@@ -495,51 +547,45 @@ export default {
 
               this.$notify.error({
                 title: "失败",
-                
                 message: "删除失败，请刷新重试"
               });
             });
         }
       }
     },
-
-    resetPwd(row) {
-      this.$confirm("此操作将重置用户密码, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "success"
-      })
-        .then(() => {
-          console.log(row);
-          resetUserPwd(row.userId)
-            .then(res => {
-              if (res != 0) {
-                this.$notify({
-                  title: "成功",
-
-                  message: "密码重置成功",
-                  type: "success"
-                });
-              }
-            })
-            .catch(error => {
-              this.$notify.error({
-                title: "错误",
-                message: "密码重置失败，请刷新重试"
-              });
-            });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+    handelSelectChange(value) {
+      this.getAllBorrow(
+        1,
+        10,
+        value == "" ? 0 : this.search,
+        this.isOverdue,
+        this.isPayment
+      );
     },
-    checkChange(){
-      console.log(this.isDel);
-      this.getAllUser(1,this.pageInfo.pageSize,this.isDel);
+    checkChange() {
+      this.isOverdue = 2;
+      this.isPayment = 2;
+      if (this.checkList.indexOf("1") >= 0) {
+        this.isOverdue = 1;
+      }
+      if (this.checkList.indexOf("2") >= 0) {
+        this.isOverdue = 0;
+      }
+      if (this.checkList.indexOf("3") >= 0) {
+        this.isPayment = 1;
+      }
+      if (this.checkList.indexOf("4") >= 0) {
+        this.isPayment = 0;
+      }
+      this.getAllBorrow(
+        1,
+        10,
+        this.search == "" ? 0 : this.search,
+        this.isOverdue,
+        this.isPayment
+      );
     },
+    visibleChange(value) {},
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -548,25 +594,23 @@ export default {
     },
     handleSizeChange(val) {
       this.changePageCoreRecordData();
-      this.getAllUser(this.pageInfo.currentPage, val,this.isDel);
+      this.getAllBorrow(
+        this.pageInfo.currentPage,
+        val,
+        this.search == "" ? 0 : this.search,
+        this.isOverdue,
+        this.isPayment
+      );
     },
     handleCurrentChange(val) {
       this.changePageCoreRecordData();
-      this.getAllUser(val, this.pageInfo.pageSize,this.isDel);
-    },
-    expandChange(row, expandedRows) {
-      let expandFlag = expandedRows.indexOf(row);
-      if (expandFlag != -1) {
-      }
-    },
-    sexFormat(row, column, cellValue, index) {
-      if (cellValue == 1) {
-        return "男";
-      }
-      if (cellValue == 0) {
-        return "女";
-      }
-      return "--";
+      this.getAllBorrow(
+        val,
+        this.pageInfo.pageSize,
+        this.search == "" ? 0 : this.search,
+        this.isOverdue,
+        this.isPayment
+      );
     },
     dateFormat: function(row, column, cellValue, index) {
       if (cellValue != null) {
@@ -580,15 +624,26 @@ export default {
         var h = date.getHours() + ":";
         var m = date.getMinutes() + ":";
         var s = date.getSeconds();
-        return Y + M + D + h + m + s;
+        return Y + M + D;
       } else {
         return "--";
       }
     },
+    realityDay(value) {
+      var cha = new Date().getTime() - new Date(value).getTime();
+      return Math.floor(cha / (24 * 3600 * 1000));
+    },
+    overDay(value) {
+      var cha = new Date().getTime() - new Date(value).getTime();
+      if (cha <= 0) {
+        return 0;
+      }
+      return Math.floor(cha / (24 * 3600 * 1000));
+    },
     // 记忆选择核心方法
     changePageCoreRecordData() {
       // 标识当前行的唯一键的名称
-      let idKey = "userId";
+      let idKey = "borrowId";
       let that = this;
       // 如果总记忆中还没有选择的数据，那么就直接取当前页选中的数据，不需要后面一系列计算
       if (this.multipleSelectionAll.length <= 0) {
@@ -635,7 +690,7 @@ export default {
         return;
       }
       // 标识当前行的唯一键的名称
-      let idKey = "userId";
+      let idKey = "borrowId";
       let selectAllIds = [];
       let that = this;
       this.multipleSelectionAll.forEach(row => {
@@ -662,23 +717,42 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getAllUser(this.pageInfo.currentPage, this.pageInfo.pageSize,false);
+  created() {
+    this.getAllBorrow(1, 10, 0, 2, 2);
+    getUsers()
+      .then(res => {
+        this.userValue = res.list;
+      })
+      .catch(error => {
+        console.log(error);
+        this.$notify.error({
+          title: "错误",
+
+          message: "获取用户信息失败，请刷新重试！"
+        });
+      });
   }
 };
 </script>
 
 <style scoped>
-#user-manage {
+.journal-borrow .borrow-table {
   margin: 15px;
 }
-#user-manage .el-table {
+.journal-borrow .el-table {
   font-size: 13px;
 }
-
-#user-manage .page-group {
+.journal-borrow .header {
+  margin: 15px;
+}
+.journal-borrow .page-group {
   float: right;
   margin: 5px 10px 0 0;
+}
+
+.journal-borrow .checkbox-group {
+  display: inline-block;
+  margin-top: 10px;
 }
 .demo-table-expand {
   font-size: 0;
