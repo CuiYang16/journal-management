@@ -17,13 +17,13 @@
               @change="notBorrowStatusChange"
             ></el-checkbox>
             <el-checkbox
-              label="已删除状态"
+              label="去激活状态"
               :disabled="notDeleteStatus"
               v-model="deleteStatus"
               @change="deleteStatusChange"
             ></el-checkbox>
             <el-checkbox
-              label="未删除状态"
+              label="激活状态"
               :disabled="deleteStatus"
               v-model="notDeleteStatus"
               @change="notDeleteStatusChange"

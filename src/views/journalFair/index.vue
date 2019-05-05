@@ -2,11 +2,11 @@
   <div id="journal-fair">
     <div class="header">
       <el-row type="flex" :gutter="0" justify="end">
-        <el-col :span="10">
+        <el-col :span="11">
           <div style="margin-top:10px;">
             <el-checkbox-group v-model="checkList" @change="checkChange">
-              <el-checkbox label="1" :disabled="checkList.indexOf('2')>=0">已删除状态</el-checkbox>
-              <el-checkbox label="2" :disabled="checkList.indexOf('1')>=0">未删除状态</el-checkbox>
+              <el-checkbox label="1" :disabled="checkList.indexOf('2')>=0">去激活状态</el-checkbox>
+              <el-checkbox label="2" :disabled="checkList.indexOf('1')>=0">激活状态</el-checkbox>
               <el-checkbox label="3" :disabled="checkList.indexOf('4')>=0">已过期书展</el-checkbox>
               <el-checkbox label="4" :disabled="checkList.indexOf('3')>=0">未过期书展</el-checkbox>
             </el-checkbox-group>
@@ -123,11 +123,24 @@
                   :loading="downloadLoading"
                   type="primary"
                   @click="handleDownload(scope.row.fairName)"
+                  :disabled="scope.row.fairUsers.length<=0"
                 >导出excel</el-button>
               </div>
-              <el-table :data="scope.row.fairUsers.users" element-loading-text="拼命加载中" v-loading="listLoading">
-                <el-table-column width="90" prop="userName" label="姓名"></el-table-column>
-                <el-table-column width="150" prop="userPhone" label="电话"></el-table-column>
+              <el-table :data="scope.row.fairUsers" element-loading-text="拼命加载中" v-loading="listLoading">
+                <el-table-column width="90" prop="userName" label="姓名">
+                  <template slot-scope="scope">
+                    <div>
+                      {{scope.row.joinUser.userName}}
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column width="150" prop="userPhone" label="电话">
+                  <template slot-scope="scope">
+                    <div>
+                      {{scope.row.joinUser.userPhone}}
+                    </div>
+                  </template>
+                </el-table-column>
               </el-table>
               <el-button slot="reference" type="text">查看用户</el-button>
             </el-popover>
