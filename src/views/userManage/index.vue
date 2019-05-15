@@ -48,12 +48,12 @@
               <el-form-item label="用户头像">
                 <el-popover placement="right" width="240" trigger="hover">
                   <img
-                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.userHeadPortrait)"
+                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/1557920722574-user-avatar.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/'+props.row.userHeadPortrait)"
                     width="200"
                     height="200"
                   >
                   <img
-                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.userHeadPortrait)"
+                    :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/1557920722574-user-avatar.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/'+props.row.userHeadPortrait)"
                     width="100"
                     height="100"
                     slot="reference"

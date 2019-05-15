@@ -52,12 +52,12 @@
               <el-form-item label="书展海报">
                 <el-popover placement="right" width="240" trigger="hover">
                   <img
-                    :src="(props.row.fairImg==null||props.row.fairImg=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.fairImg)"
+                    :src="(props.row.fairImg==null||props.row.fairImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/1555989440146-journal-fair.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/'+props.row.fairImg)"
                     width="210"
                     height="300"
                   >
                   <img
-                    :src="(props.row.fairImg==null||props.row.fairImg=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.fairImg)"
+                    :src="(props.row.fairImg==null||props.row.fairImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/1555989440146-journal-fair.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/'+props.row.fairImg)"
                     width="70"
                     height="100"
                     slot="reference"
@@ -126,19 +126,19 @@
                   :disabled="scope.row.fairUsers.length<=0"
                 >导出excel</el-button>
               </div>
-              <el-table :data="scope.row.fairUsers" element-loading-text="拼命加载中" v-loading="listLoading">
+              <el-table
+                :data="scope.row.fairUsers"
+                element-loading-text="拼命加载中"
+                v-loading="listLoading"
+              >
                 <el-table-column width="90" prop="userName" label="姓名">
                   <template slot-scope="scope">
-                    <div>
-                      {{scope.row.joinUser.userName}}
-                    </div>
+                    <div>{{scope.row.joinUser.userName}}</div>
                   </template>
                 </el-table-column>
                 <el-table-column width="150" prop="userPhone" label="电话">
                   <template slot-scope="scope">
-                    <div>
-                      {{scope.row.joinUser.userPhone}}
-                    </div>
+                    <div>{{scope.row.joinUser.userPhone}}</div>
                   </template>
                 </el-table-column>
               </el-table>

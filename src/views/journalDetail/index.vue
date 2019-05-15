@@ -73,12 +73,12 @@
               <el-form-item label="杂志图片" prop="journalImg">
                 <el-popover placement="right" width="240" trigger="hover">
                   <img
-                    :src="(props.row.journalImg==null||props.row.journalImg=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.journalImg)"
+                    :src="(props.row.journalImg==null||props.row.journalImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/1555556540064-journal-timg.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/'+props.row.journalImg)"
                     width="210"
                     height="300"
                   >
                   <img
-                    :src="(props.row.journalImg==null||props.row.journalImg=='')?require('E:/img/1555556540064-journal-timg.jpg'):require('E:/img/'+props.row.journalImg)"
+                    :src="(props.row.journalImg==null||props.row.journalImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/1555556540064-journal-timg.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/'+props.row.journalImg)"
                     width="70"
                     height="100"
                     slot="reference"

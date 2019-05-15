@@ -37,7 +37,6 @@ const actions = {
         .then(response => {
           commit("SET_TOKEN", response.token);
           setToken(response.token);
-         
           resolve();
         })
         .catch(error => {
@@ -63,7 +62,7 @@ const actions = {
           if (!list || list.length <= 0) {
             reject("getInfo: roles must be a non-null array!");
           }
-          commit("SET_AVATAR", require("E:/img/" + response.avatar));
+          commit("SET_AVATAR", require("F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/" + response.avatar));
           commit("SET_ROLES", list);
           commit("SET_NAME", response.userName);
 
