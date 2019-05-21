@@ -396,7 +396,7 @@ export default {
           { required: true, message: "请选择杂志封面", trigger: "change" }
         ],
         author: [
-          { required: true, message: "请输入作者名称", trigger: "blur" }
+          { required: false, message: "请输入作者名称", trigger: "blur" }
         ],
         journalLevel: [
           { required: true, message: "请选择杂志级别", trigger: "change" }
@@ -408,20 +408,24 @@ export default {
           { required: true, message: "请选择出版时间", trigger: "change" }
         ],
         reelNumber: [
-          { required: true, trigger: "blur", validator: validateNumber }
+          { required: false },
+          { trigger: "blur", validator: validateNumber }
         ],
         issue: [{ required: true, validator: validateYM, trigger: "blur" }],
         totalIssue: [
           { required: true, trigger: "blur", validator: validateNumber }
         ],
         cn: [{ required: true, validator: validateCN, trigger: "blur" }],
-        isbn: [{ required: true, validator: validateIsbn, trigger: "blur" }],
+        isbn: [
+          { required: false },
+          { validator: validateIsbn, trigger: "blur" }
+        ],
         issn: [{ required: true, validator: validateIssn, trigger: "blur" }],
         publicationCycle: [
           { required: true, message: "请选择出版周期", trigger: "change" }
         ],
         publishingHouse: [
-          { required: true, message: "请输入出版社", trigger: "blur" }
+          { required: false, message: "请输入出版社", trigger: "blur" }
         ],
         journalHost: [
           { required: true, message: "请输入主办方", trigger: "blur" }
@@ -436,10 +440,12 @@ export default {
           { required: true, message: "请选择杂志语言", trigger: "change" }
         ],
         foreignCodes: [
-          { required: true, validator: validateForeignCodes, trigger: "blur" }
+          { required: false },
+          { validator: validateForeignCodes, trigger: "blur" }
         ],
         domesticCode: [
-          { required: true, validator: validateDomesticCode, trigger: "blur" }
+          { required: false },
+          { validator: validateDomesticCode, trigger: "blur" }
         ],
         format: [{ required: true, message: "请选择开本", trigger: "change" }],
         pageNumber: [

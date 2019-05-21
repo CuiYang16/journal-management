@@ -29,7 +29,7 @@
               @click="editTypeDialog(scope.row,scope.$index)"
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="添加子菜单" placement="top-start">
+          <el-tooltip class="item" effect="dark" content="添加子类别" placement="top-start">
             <el-button
               size="mini"
               type="text"
@@ -112,12 +112,12 @@
       </el-dialog>
     </div>
     <el-tooltip placement="top" content="回到顶部">
-    <back-to-top
-      :custom-style="myBackToTopStyle"
-      :visibility-height="150"
-      :back-position="50"
-      transition-name="fade"
-    />
+      <back-to-top
+        :custom-style="myBackToTopStyle"
+        :visibility-height="150"
+        :back-position="50"
+        transition-name="fade"
+      />
     </el-tooltip>
   </div>
 </template>
@@ -250,7 +250,7 @@ export default {
               this.$notify({
                 title: "成功",
                 message: "上移子类别信息成功",
-                duration: 1500,
+
                 type: "success"
               });
               this.toggleExpandedRecursion(this.trIndex - 1);
@@ -261,14 +261,14 @@ export default {
 
             this.$notify.error({
               title: "错误",
-              duration: 2500,
+
               message: "上移失败，请刷新重试！"
             });
           });
       } else {
         this.$notify.error({
           title: "错误",
-          duration: 2500,
+
           message: "第一条数据不可上移"
         });
       }
@@ -295,7 +295,7 @@ export default {
               this.tableData.splice(index, 1, nextRowF);
               this.$notify({
                 title: "成功",
-                duration: 1500,
+
                 message: "下子类别信息成功",
                 type: "success"
               });
@@ -307,14 +307,14 @@ export default {
 
             this.$notify.error({
               title: "错误",
-              duration: 2500,
+
               message: "下移失败，请刷新重试！"
             });
           });
       } else {
         this.$notify.error({
           title: "错误",
-          duration: 2500,
+
           message: "最后一条数据不可下移"
         });
       }
@@ -338,7 +338,7 @@ export default {
                   );
                   this.$notify({
                     title: "成功",
-                    duration: 1500,
+
                     message: "添加子类别信息成功",
                     type: "success"
                   });
@@ -352,7 +352,7 @@ export default {
               .catch(error => {
                 this.$notify.error({
                   title: "错误",
-                  duration: 2500,
+
                   message: "添加失败，请刷新重试！"
                 });
                 this.addDialogVisible = !this.addDialogVisible;
@@ -369,7 +369,7 @@ export default {
                   );
                   this.$notify({
                     title: "成功",
-                    duration: 1500,
+
                     message: "添加顶级类别信息成功",
                     type: "success"
                   });
@@ -384,7 +384,7 @@ export default {
                 console.log(error);
                 this.$notify.error({
                   title: "错误",
-                  duration: 2500,
+
                   message: "添加失败，请刷新重试！"
                 });
                 this.addDialogVisible = !this.addDialogVisible;
@@ -416,7 +416,7 @@ export default {
                 this.toggleExpandedRecursion(this.trIndex);
                 this.$notify({
                   title: "成功",
-                  duration: 1500,
+
                   message: "编辑类别信息成功",
                   type: "success"
                 });
@@ -427,7 +427,7 @@ export default {
               console.log(error);
               this.$notify.error({
                 title: "错误",
-                duration: 2500,
+
                 message: "编辑失败，请刷新重试！"
               });
               this.editDialogVisible = !this.editDialogVisible;
@@ -453,18 +453,23 @@ export default {
             this.$refs.TreeTable.delete(this.delRow);
             this.$notify({
               title: "成功",
-              duration: 1500,
+
               message: "删除类别信息成功",
               type: "success"
             });
             this.toggleExpandedRecursion(this.trIndex);
+          } else if (response.val == -1) {
+            this.$notify.error({
+              title: "错误",
+              message: "类别已被关联，请确认后重试！"
+            });
           }
         })
         .catch(error => {
           console.log(error);
           this.$notify.error({
             title: "错误",
-            duration: 2500,
+
             message: "删除失败，请刷新重试！"
           });
         });

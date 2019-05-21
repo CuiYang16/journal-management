@@ -408,7 +408,13 @@ export default {
                   message: "批量删除成功!",
                   type: "success"
                 });
-              } else {
+              } else if(res.val ==-1){
+                this.$notify.error({
+                  title: "失败",
+                  
+                  message: "用户信息被关联，请确认后重试！"
+                });
+              }else {
                 this.$notify.error({
                   title: "失败",
                   
@@ -481,6 +487,12 @@ export default {
                   
                   message: "删除成功!",
                   type: "success"
+                });
+              }else if(res.val ==-1){
+                this.$notify.error({
+                  title: "失败",
+                  
+                  message: "用户信息被关联，请确认后重试！"
                 });
               } else {
                 this.$notify.error({

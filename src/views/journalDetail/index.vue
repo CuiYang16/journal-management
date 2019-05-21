@@ -91,7 +91,7 @@
               </el-form-item>
 
               <el-form-item label="出版时间">
-                <span>{{ (props.row.publishTime==null||props.row.publishTime=="")?"--":dateFormat(null,null,props.row.publishTime) }}</span>
+                <span>{{ (props.row.publishTime==null||props.row.publishTime=="")?"--":dateFormat(null,null,props.row.publishTime,null,'date') }}</span>
               </el-form-item>
 
               <el-form-item label="卷号">
@@ -159,22 +159,23 @@
               </el-form-item>
               <el-row type="flex" class="row-bg">
                   <el-form-item label="商品描述" style="width:100%">
-                  <el-popover placement="right" trigger="hover">
+                  <el-popover placement="right" trigger="hover" width="840" >
                       <div v-html="props.row.description"></div>
                         <el-button slot="reference" size="mini" type="primary">预览</el-button>
+    
                          </el-popover>
-                          <div class="describe-form">{{ props.row.description }}</div>
+                          
                   </el-form-item>
               </el-row>
               <el-row type="flex" class="row-bg">
                 <el-col :span="24">
-                  <el-form-item label="附加图片">
-                    <span v-for="i in props.row.journalImages" style="margin-right:15px">
+                  <el-form-item label="附加图片" style="padding-top:20px;">
+                    <span v-for="i in props.row.journalImages" style="margin-right:15px;padding-top:20px;">
                       <el-popover placement="right" width="240" trigger="hover">
-                        <img :src="require('E:/img/'+i.name)" width="210" height="300">
+                        <img :src="require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/'+i.name)" width="210" height="300">
 
                         <img
-                          :src="require('E:/img/'+i.name)"
+                          :src="require('F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/'+i.name)"
                           width="70"
                           height="100"
                           slot="reference"
@@ -294,7 +295,9 @@
   user-select: none;
 }
 #journal .describe-form {
-  width: 100%;
+  position: relative;
+  float: right;
+  width: 80%;
   max-height: 60px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -519,6 +522,7 @@ export default {
     editSubmit(editValue) {
       this.editDialogValue.editFormVisible = !this.editDialogValue
         .editFormVisible;
+        editValue.typeId=editValue.journalType[editValue.journalType.length-1];
       updateJournals(editValue)
         .then(res => {
           if (res.val != 0) {
@@ -527,9 +531,9 @@ export default {
             this.$refs.editDialog.$refs.upload.submit();
             delImgs(editValue.journalId)
               .then(res => {
-                if (res.val == 1) {
+                //if (res.val == 1) {
                   this.$refs.editDialog.$refs.upload2.submit();
-                }
+               // }
               })
               .catch(error => {
                 this.$notify.error({
@@ -634,7 +638,7 @@ export default {
                   this.notBorrowStatus,
                   this.notDeleteStatus
                 );
-              } else {
+              }else {
                 this.getJournal(
                   this.pageInfo.currentPage,
                   this.pageInfo.pageSize,
@@ -650,7 +654,13 @@ export default {
                 message: "删除成功!",
                 type: "success"
               });
-            } else {
+            }else if(res.val ==-1){
+                this.$notify.error({
+                  title: "失败",
+                  
+                  message: "杂志信息被关联，请确认后重试！"
+                });
+              }  else {
               this.$notify.error({
                 title: "失败",
                 duration: 4500,
@@ -729,6 +739,12 @@ export default {
                   duration: 3500,
                   message: "批量删除成功!",
                   type: "success"
+                });
+              }else if(res.val ==-1){
+                this.$notify.error({
+                  title: "失败",
+                  
+                  message: "杂志信息被关联，请确认后重试！"
                 });
               } else {
                 this.$notify.error({
@@ -845,7 +861,7 @@ export default {
         });
     },
 
-    dateFormat: function(row, column, cellValue, index) {
+    dateFormat: function(row, column, cellValue, index,type) {
       if (cellValue != null) {
         var date = new Date(cellValue); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + "-";
@@ -857,6 +873,8 @@ export default {
         var h = date.getHours() + ":";
         var m = date.getMinutes() + ":";
         var s = date.getSeconds();
+        if(type=="date"){return Y + M + D;
+        }
         return Y + M + D + h + m + s;
       } else {
         return "--";

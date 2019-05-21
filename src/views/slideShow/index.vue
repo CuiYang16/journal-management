@@ -107,7 +107,7 @@ export default {
             this.fileList.push({
 
               name: l.name,
-              url: require("E:/img/" + l.name)
+              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/slide-img/" + l.name)
             });
           });
         }

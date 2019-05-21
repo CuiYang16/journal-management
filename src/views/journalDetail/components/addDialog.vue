@@ -410,7 +410,7 @@ export default {
         ],
         jimg: [{ required: true, message: "请选择杂志封面", trigger: "blur" }],
         author: [
-          { required: true, message: "请输入作者名称", trigger: "blur" }
+          { required: false, message: "请输入作者名称", trigger: "blur" }
         ],
         journalLevel: [
           { required: true, message: "请选择杂志级别", trigger: "change" }
@@ -422,20 +422,24 @@ export default {
           { required: true, message: "请选择出版时间", trigger: "change" }
         ],
         reelNumber: [
-          { required: true, trigger: "blur", validator: validateNumber }
+          { required: false },
+          { trigger: "blur", validator: validateNumber }
         ],
         issue: [{ required: true, validator: validateYM, trigger: "blur" }],
         totalIssue: [
           { required: true, trigger: "blur", validator: validateNumber }
         ],
         cn: [{ required: true, validator: validateCN, trigger: "blur" }],
-        isbn: [{ required: true, validator: validateIsbn, trigger: "blur" }],
+        isbn: [
+          { required: false },
+          { validator: validateIsbn, trigger: "blur" }
+        ],
         issn: [{ required: true, validator: validateIssn, trigger: "blur" }],
         publicationCycle: [
           { required: true, message: "请选择出版周期", trigger: "change" }
         ],
         publishingHouse: [
-          { required: true, message: "请输入出版社", trigger: "blur" }
+          { required: false, message: "请输入出版社", trigger: "blur" }
         ],
         journalHost: [
           { required: true, message: "请输入主办方", trigger: "blur" }
@@ -450,18 +454,24 @@ export default {
           { required: true, message: "请选择杂志语言", trigger: "change" }
         ],
         foreignCodes: [
-          { required: true, validator: validateForeignCodes, trigger: "blur" }
+          { required: false },
+          { validator: validateForeignCodes, trigger: "blur" }
         ],
         domesticCode: [
-          { required: true, validator: validateDomesticCode, trigger: "blur" }
+          { required: false },
+          { validator: validateDomesticCode, trigger: "blur" }
         ],
         format: [{ required: true, message: "请选择开本", trigger: "change" }],
         pageNumber: [
           { required: true, validator: validateNumber, trigger: "blur" }
         ],
-        inventory:[{
-          required: true, message: "请输入库存量", trigger: "change"
-        }],
+        inventory: [
+          {
+            required: true,
+            message: "请输入库存量",
+            trigger: "change"
+          }
+        ],
         isBorrow: [
           { required: true, message: "请选择是否可借阅", trigger: "change" }
         ],
@@ -501,12 +511,13 @@ export default {
         { value: 8, label: "年刊" }
       ],
       formatOptions: [
-        { value: 1, label: "2开", desc: "A1" },
-        { value: 2, label: "4开", desc: "A2" },
-        { value: 3, label: "8开", desc: "A3" },
-        { value: 4, label: "16开", desc: "A4" },
-        { value: 5, label: "32开", desc: "A5" },
-        { value: 6, label: "64开", desc: "A6" }
+        { value: 1, desc: "2开", label: "A1" },
+        { value: 2, desc: "4开", label: "A2" },
+        { value: 3, desc: "8开", label: "A3" },
+        { value: 4, desc: "16开", label: "A4" },
+        { value: 5, desc: "32开", label: "A5" },
+        { value: 6, desc: "64开", label: "A6" },
+        { value: 7, desc: "B5", label: "B5" }
       ],
       publishingAreaOptions: [
         { value: 1, label: "北京", short: "京" },
@@ -632,7 +643,7 @@ export default {
           this.$emit("addSubmit", this.addFormValue);
           return true;
         } else {
-          this.$message.error('请按提示正确填写信息！');
+          this.$message.error("请按提示正确填写信息！");
           return false;
         }
       });

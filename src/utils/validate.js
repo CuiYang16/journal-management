@@ -52,7 +52,10 @@ export function isArray(arg) {
 
 export function validNumber(value) {
   const reg = /^([1-9][0-9]*)$/;
-  return reg.test(value);
+  if(value!=null&&value!=""){
+    return reg.test(value);
+      }
+      return true;
 }
 export function validPrice(value) {
   const reg = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
@@ -68,21 +71,30 @@ export function validCN(value) {
 }
 
 export function validIssn(value) {
-  const reg = /^[1-9][0-9]{3}-[1-9][0-9]{3}$/;
+  const reg = /^[1-9][0-9]{3}-[0-9][0-9]{3}$/;
   return reg.test(value);
 }
 
 export function validIsbn(value) {
   const reg = /^(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9]$/;
-  return reg.test(value);
+  if(value!=null&&value!=""){
+return reg.test(value);
+  }
+  return true;
 }
 
 export function validForeignCodes(value) {
   const reg = /^(M|m)[0-9]{3,4}$/;
-  return reg.test(value);
+  if(value!=null&&value!=""){
+    return reg.test(value);
+      }
+      return true;
 }
 
 export function validDomesticCode(value) {
   const reg = /^[1-9]-[0-9]{3}$/;
-  return reg.test(value);
+  if(value!=null&&value!=""){
+    return reg.test(value);
+      }
+      return true;
 }
