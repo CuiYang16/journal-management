@@ -46,7 +46,7 @@
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="用户头像">
-                <el-popover placement="right" width="240" trigger="hover">
+                <el-popover placement="right" width="230" trigger="hover">
                   <img
                     :src="(props.row.userHeadPortrait==null||props.row.userHeadPortrait=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/1557920722574-user-avatar.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/'+props.row.userHeadPortrait)"
                     width="200"

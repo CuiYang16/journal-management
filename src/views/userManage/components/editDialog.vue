@@ -241,7 +241,7 @@ export default {
           if (this.editUserValue.editFormValue.userHeadPortrait != null) {
             this.fileList.push({
               name: this.editUserValue.editFormValue.userHeadPortrait,
-              url: require("E:/img/" +
+              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/" +
                 this.editUserValue.editFormValue.userHeadPortrait)
             });
             this.uploadBtn = false;

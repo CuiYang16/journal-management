@@ -43,3 +43,12 @@ export function delJournalFairs(fairInformationId,delType,delIds) {
     data:{fairInformationId,delType,delIds}
   })
 }
+
+//杂志书展统计
+export function fairChart() {
+  return request({
+    url: '/jm-fair/journal-fair/get-fair-chart',
+    method: 'get',
+
+  })
+}

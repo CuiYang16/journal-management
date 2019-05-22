@@ -17,6 +17,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             align="right"
+            :default-time="['8:00:00', '18:00:00']"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="书展地点" :label-width="formLabelWidth" prop="fairSite">
@@ -214,7 +215,7 @@ export default {
           this.fileList = [
             {
               name: this.editDialogValue.editFormValue.fairImg,
-              url: require("E:/img/" +
+              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/" +
                 this.editDialogValue.editFormValue.fairImg)
             }
           ];

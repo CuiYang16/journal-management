@@ -102,9 +102,7 @@
             :picker-options="pickerOptions"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="杂志作者" :label-width="formLabelWidth" prop="author">
-          <el-input v-model="addFormValue.author" autocomplete="off" clearable></el-input>
-        </el-form-item>
+
         <el-form-item label="卷号" :label-width="formLabelWidth" prop="reelNumber">
           <el-input
             v-model="addFormValue.reelNumber"
@@ -157,7 +155,9 @@
         <el-form-item label="出版社" :label-width="formLabelWidth" prop="publishingHouse">
           <el-input v-model="addFormValue.publishingHouse" autocomplete="off" clearable></el-input>
         </el-form-item>
-
+        <el-form-item label="主管单位" :label-width="formLabelWidth" prop="author">
+          <el-input v-model="addFormValue.author" autocomplete="off" clearable></el-input>
+        </el-form-item>
         <el-form-item label="主办方" :label-width="formLabelWidth" prop="journalHost">
           <el-input v-model="addFormValue.journalHost" autocomplete="off" clearable></el-input>
         </el-form-item>
@@ -410,7 +410,7 @@ export default {
         ],
         jimg: [{ required: true, message: "请选择杂志封面", trigger: "blur" }],
         author: [
-          { required: false, message: "请输入作者名称", trigger: "blur" }
+          { required: true, message: "请输入主管单位", trigger: "blur" }
         ],
         journalLevel: [
           { required: true, message: "请选择杂志级别", trigger: "change" }

@@ -115,9 +115,7 @@
             :picker-options="pickerOptions"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="杂志作者" :label-width="formLabelWidth" prop="author">
-          <el-input v-model="editDialogValue.editValue.author" autocomplete="off" clearable></el-input>
-        </el-form-item>
+
         <el-form-item label="卷号" :label-width="formLabelWidth" prop="reelNumber">
           <el-input
             v-model="editDialogValue.editValue.reelNumber"
@@ -173,7 +171,9 @@
             clearable
           ></el-input>
         </el-form-item>
-
+        <el-form-item label="主管单位" :label-width="formLabelWidth" prop="author">
+          <el-input v-model="editDialogValue.editValue.author" autocomplete="off" clearable></el-input>
+        </el-form-item>
         <el-form-item label="主办方" :label-width="formLabelWidth" prop="journalHost">
           <el-input v-model="editDialogValue.editValue.journalHost" autocomplete="off" clearable></el-input>
         </el-form-item>
@@ -396,7 +396,7 @@ export default {
           { required: true, message: "请选择杂志封面", trigger: "change" }
         ],
         author: [
-          { required: false, message: "请输入作者名称", trigger: "blur" }
+          { required: true, message: "请输入主管单位", trigger: "blur" }
         ],
         journalLevel: [
           { required: true, message: "请选择杂志级别", trigger: "change" }
@@ -451,9 +451,13 @@ export default {
         pageNumber: [
           { required: true, validator: validateNumber, trigger: "blur" }
         ],
-        inventory:[{
-          required: true, message: "请输入库存量", trigger: "change"
-        }],
+        inventory: [
+          {
+            required: true,
+            message: "请输入库存量",
+            trigger: "change"
+          }
+        ],
         isBorrow: [
           { required: true, message: "请选择是否可借阅", trigger: "change" }
         ],
@@ -493,12 +497,13 @@ export default {
         { value: 8, label: "年刊" }
       ],
       formatOptions: [
-        { value: 1, label: "2开", desc: "A1" },
-        { value: 2, label: "4开", desc: "A2" },
-        { value: 3, label: "8开", desc: "A3" },
-        { value: 4, label: "16开", desc: "A4" },
-        { value: 5, label: "32开", desc: "A5" },
-        { value: 6, label: "64开", desc: "A6" }
+        { value: 1, desc: "2开", label: "A1" },
+        { value: 2, desc: "4开", label: "A2" },
+        { value: 3, desc: "8开", label: "A3" },
+        { value: 4, desc: "16开", label: "A4" },
+        { value: 5, desc: "32开", label: "A5" },
+        { value: 6, desc: "64开", label: "A6" },
+        { value: 7, desc: "B5", label: "B5" }
       ],
       publishingAreaOptions: [
         { value: 1, label: "北京", short: "京" },
@@ -702,7 +707,8 @@ export default {
           if (journalImg != null && journalImg != "") {
             this.fileList.push({
               name: journalImg,
-              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" + journalImg)
+              url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" +
+                journalImg)
             });
           }
 
@@ -710,7 +716,8 @@ export default {
             this.editDialogValue.editValue.journalImages.forEach(j => {
               this.fileList2.push({
                 name: j.name,
-                url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" + j.name)
+                url: require("F:/MyWorkSpace/bishe-vue/journal-door/static/journal-img/" +
+                  j.name)
               });
             });
           }

@@ -1,27 +1,24 @@
 <template>
   <el-card class="box-card-component" style="margin-left:8px;">
     <div slot="header" class="box-card-header">
-      <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">
+      <img :src="require('F:/MyWorkSpace/bishe-vue/journal-door/static/slide-img/dashboard.png')">
     </div>
     <div style="position:relative;">
-      <pan-thumb :image="avatar" class="panThumb" />
+      
       <mallki class-name="mallki-text" text="vue-element-admin" />
       <div style="padding-top:35px;" class="progress-item">
-        <span>Vue</span>
-        <el-progress :percentage="70" />
+        <span>激活用户</span>
+        <el-progress :percentage="boxChartData[0]" />
       </div>
       <div class="progress-item">
-        <span>JavaScript</span>
-        <el-progress :percentage="18" />
+        <span>可借阅杂志期刊</span>
+        <el-progress :percentage="boxChartData[1]" />
       </div>
       <div class="progress-item">
-        <span>Css</span>
-        <el-progress :percentage="12" />
+        <span>未过期书展</span>
+        <el-progress :percentage="boxChartData[2]" />
       </div>
-      <div class="progress-item">
-        <span>ESLint</span>
-        <el-progress :percentage="100" status="success" />
-      </div>
+
     </div>
   </el-card>
 </template>
@@ -32,6 +29,7 @@ import PanThumb from '@/components/PanThumb'
 import Mallki from '@/components/TextHoverEffect/Mallki'
 
 export default {
+  props:["boxChartData"],
   components: { PanThumb, Mallki },
 
   filters: {

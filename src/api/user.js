@@ -115,3 +115,10 @@ export function delMulUser(delIds) {
   })
 }
 
+// 用户统计信息
+export function userChart() {
+  return request({
+    url: '/jm-user/user/get-user-chart',
+    method: 'get',
+  })
+}

@@ -50,16 +50,16 @@
           <template slot-scope="props">
             <el-form label-position="right" class="demo-table-expand" label-width="80px">
               <el-form-item label="书展海报">
-                <el-popover placement="right" width="240" trigger="hover">
+                <el-popover placement="right" width="330" trigger="hover">
                   <img
                     :src="(props.row.fairImg==null||props.row.fairImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/1555989440146-journal-fair.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/'+props.row.fairImg)"
-                    width="210"
-                    height="300"
+                    width="300"
+                    height="210"
                   >
                   <img
                     :src="(props.row.fairImg==null||props.row.fairImg=='')?require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/1555989440146-journal-fair.jpg'):require('F:/MyWorkSpace/bishe-vue/journal-door/static/fair-img/'+props.row.fairImg)"
-                    width="70"
-                    height="100"
+                    width="100"
+                    height="70"
                     slot="reference"
                   >
                 </el-popover>
@@ -80,17 +80,17 @@
                 <span>{{ props.row.fairUserShow.userName }}</span>
               </el-form-item>
               <el-form-item label="书展简介">
-                <el-popover placement="top" trigger="hover">
+                <el-popover placement="right" trigger="hover" width="840">
                   <div v-html="props.row.fairDescribe"></div>
                   <el-button slot="reference" size="mini" type="primary">预览</el-button>
-                  <div slot="reference" class="describe-form">{{ props.row.fairDescribe }}</div>
+                  
                 </el-popover>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="ID" prop="fairInformationId" width="100"></el-table-column>
-        <el-table-column label="书展名称" prop="fairName" align="center"></el-table-column>
+        <el-table-column label="ID" prop="fairInformationId" width="50"></el-table-column>
+        <el-table-column label="书展名称" prop="fairName" align="center" width="200" show-overflow-tooltip ></el-table-column>
         <el-table-column label="书展主题" prop="fairTheme" align="center"></el-table-column>
         <el-table-column
           label="开始时间"
@@ -386,16 +386,20 @@ export default {
     },
     editJournalFair(row) {
       this.editDialogValue.editFormValue = Object.assign({}, row);
-      this.editDialogValue.editFormValue.journalDate = [
-        this.editDialogValue.editFormValue.fairStartTime,
-        this.editDialogValue.editFormValue.fairEndTime
-      ];
+  this.$set(this.editDialogValue.editFormValue,'journalDate',[
+        new Date(this.editDialogValue.editFormValue.fairStartTime),
+        new Date(this.editDialogValue.editFormValue.fairEndTime)
+      ]);
+      // this.editDialogValue.editFormValue.journalDate = [
+      //   new Date(this.editDialogValue.editFormValue.fairStartTime),
+      //   new Date(this.editDialogValue.editFormValue.fairEndTime)
+      // ];
       this.$set(this.editDialogValue.editFormValue, "fimg", row.fairImg);
       this.editDialogValue.editDialogVisible = !this.editDialogValue
         .editDialogVisible;
     },
     editJournalFairSubmit(editValue) {
-      console.log(editValue);
+      
       this.editDialogValue.editDialogVisible = !this.editDialogValue
         .editDialogVisible;
       updateJournalFairs(editValue)

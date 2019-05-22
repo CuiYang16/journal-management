@@ -88,3 +88,11 @@ export function delBorrowMul(delIds) {
     data:{delIds}
   })
 }
+
+//借阅统计
+export function borrowChart() {
+  return request({
+    url: '/jm-journal/journal-borrow/get-borrow-chart',
+    method: 'get',
+  })
+}

@@ -42,7 +42,6 @@ export const constantRoutes = [
     path: "/",
     component: Layout,
     redirect: "dashboard",
-    meta: { roles: ["admin", "editor"] },
     children: [
       {
         path: "/dashboard",
@@ -53,7 +52,6 @@ export const constantRoutes = [
           icon: "dashboard",
           noCache: true,
           affix: true,
-          roles: ["admin", "editor"]
         }
       }
     ]
@@ -150,7 +148,7 @@ export const asyncRoutes = [
     path: "/user",
     component: Layout,
     redirect: "dashboard",
-    meta: { roles: ["admin", "editor"] },
+    meta: { roles: ["admin"] },
     children: [
       {
         path: "/userManage",

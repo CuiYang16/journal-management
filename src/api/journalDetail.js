@@ -203,3 +203,11 @@ export function delImgs(journalId) {
   })
 }
 
+// 杂志统计信息
+export function journalChart() {
+  return request({
+    url: '/jm-journal/journal-detail/get-journal-chart',
+    method: 'get',
+
+  })
+}
