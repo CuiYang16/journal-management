@@ -1,9 +1,9 @@
 export default {
   route: {
     dashboard: '首页',
-    journalDetail: '杂志管理',
+    journalDetail: '杂志期刊管理',
     journalType:"杂志类型管理",
-    journalFair:"杂志书展管理",
+    journalFair:"书展管理",
     slideShow:"首页轮播图管理",
     userManage:"用户管理",
     journalBorrow:"借阅管理"

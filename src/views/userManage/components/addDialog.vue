@@ -107,6 +107,7 @@ export default {
     };
     const validateConfirmPwd = (rule, value, callback) => {
       var pPattern = /^.*(?=.{8,12})(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*?_]).*$/;
+      
       if (!pPattern.test(value) || this.addUserForm.userPwd != value) {
         callback(new Error("密码不一致，请重新确认！"));
       } else {
@@ -115,6 +116,9 @@ export default {
     };
     const validatePhone = (rule, value, callback) => {
       var pPattern = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      if(value==null||value==""){
+        callback();
+      }
       if (!pPattern.test(value)) {
         callback(new Error("请正确输入手机号！"));
       } else {
@@ -123,6 +127,9 @@ export default {
     };
     const validateEmail = (rule, value, callback) => {
       var ePattern = /^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-z]{2,}$/;
+      if(value==null||value==""){
+        callback();
+      }
       if (!ePattern.test(value)) {
         callback(new Error("请正确输入邮箱！"));
       } else {
@@ -163,7 +170,7 @@ export default {
           { required: true, message: "请选择用户性别", trigger: "change" }
         ],
         userHeadPortrait: [
-          { required: false, message: "请选择用户头像", trigger: "change" }
+          { required: true, message: "请选择用户头像", trigger: "change" }
         ],
         roles: [
           { required: true, message: "请选择用户角色", trigger: "change" }

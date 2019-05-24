@@ -76,7 +76,7 @@ export const asyncRoutes = [
         name: "JournalDetail",
         meta: {
           title: "journalDetail",
-          icon: "table",
+          icon: "education",
           noCache: true,
           roles: ["admin", "editor"]
         }
@@ -116,7 +116,7 @@ export const asyncRoutes = [
         name: "JournalFair",
         meta: {
           title: "journalFair",
-          icon: "table",
+          icon: "documentation",
           noCache: true,
           roles: ["admin", "editor"]
         }
@@ -136,7 +136,7 @@ export const asyncRoutes = [
         name: "SlideShow",
         meta: {
           title: "slideShow",
-          icon: "table",
+          icon: "icon",
           noCache: true,
           roles: ["admin", "editor"]
         }
@@ -156,7 +156,7 @@ export const asyncRoutes = [
         name: "UserManage",
         meta: {
           title: "userManage",
-          icon: "user",
+          icon: "peoples",
           noCache: true,
           roles: ["admin", "editor"]
         }
@@ -176,7 +176,7 @@ export const asyncRoutes = [
         name: "JournalBorrow",
         meta: {
           title: "journalBorrow",
-          icon: "user",
+          icon: "shopping",
           noCache: true,
           roles: ["admin", "editor"]
         }

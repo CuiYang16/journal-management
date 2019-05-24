@@ -40,8 +40,6 @@ export default {
   },
   methods: {},
   mounted() {
-    console.log(111);
-    
     userChart()
       .then(res => {
         let a = res.str.split(",");

@@ -5,7 +5,7 @@
       :visible.sync="editUserValue.editDialogVisible"
       :close-on-click-modal="false"
     >
-      <el-form :model="editUserValue.editFormValue" ref="editUserForm">
+      <el-form :model="editUserValue.editFormValue" ref="editUserForm" :rules="editUserRule">
         <el-form-item label="用户名" :label-width="formLabelWidth" prop="userName">
           <el-input v-model="editUserValue.editFormValue.userName" autocomplete="off"></el-input>
         </el-form-item>
@@ -105,6 +105,9 @@ export default {
     };
     const validatePwd = (rule, value, callback) => {
       var pPattern = /^.*(?=.{8,12})(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*?_]).*$/;
+      if (value == null || value == "") {
+        callback();
+      }
       if (!pPattern.test(value)) {
         callback(new Error("8-12位，必须包括字母，数字，特殊字符！"));
       } else {
@@ -113,6 +116,12 @@ export default {
     };
     const validateConfirmPwd = (rule, value, callback) => {
       var pPattern = /^.*(?=.{8,12})(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*?_]).*$/;
+      if (
+        this.editUserValue.editFormValue.userPwd == null ||
+        this.editUserValue.editFormValue.userPwd == ""
+      ) {
+        callback();
+      }
       if (
         !pPattern.test(value) ||
         this.editUserValue.editFormValue.userPwd != value
@@ -124,6 +133,9 @@ export default {
     };
     const validatePhone = (rule, value, callback) => {
       var pPattern = /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
+      if (value == null || value == "") {
+        callback();
+      }
       if (!pPattern.test(value)) {
         callback(new Error("请正确输入手机号！"));
       } else {
@@ -132,6 +144,9 @@ export default {
     };
     const validateEmail = (rule, value, callback) => {
       var ePattern = /^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-z]{2,}$/;
+      if (value == null || value == "") {
+        callback();
+      }
       if (!ePattern.test(value)) {
         callback(new Error("请正确输入邮箱！"));
       } else {
@@ -146,9 +161,9 @@ export default {
         userName: [
           { required: true, validator: validateUserName, trigger: "blur" }
         ],
-        userPwd: [{ required: true, validator: validatePwd, trigger: "blur" }],
+        userPwd: [{ required: false, validator: validatePwd, trigger: "blur" }],
         confirmPwd: [
-          { required: true, validator: validateConfirmPwd, trigger: "blur" }
+          { required: false, validator: validateConfirmPwd, trigger: "blur" }
         ],
         userPhone: [
           { required: false, validator: validatePhone, trigger: "blur" }
@@ -160,7 +175,7 @@ export default {
           { required: true, message: "请选择用户性别", trigger: "change" }
         ],
         userHeadPortrait: [
-          { required: false, message: "请选择用户头像", trigger: "change" }
+          { required: true, message: "请选择用户头像", trigger: "change" }
         ],
         roles: [
           { required: true, message: "请选择用户角色", trigger: "change" }
@@ -180,8 +195,8 @@ export default {
             Object.assign({}, this.editUserValue.editFormValue)
           );
           this.$nextTick(function() {
-             // this.$refs.uploadAvatar.clearFiles();
-            });
+            // this.$refs.uploadAvatar.clearFiles();
+          });
         } else {
           this.$notify.error({
             title: "错误",
