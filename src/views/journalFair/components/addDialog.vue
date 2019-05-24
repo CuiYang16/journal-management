@@ -59,7 +59,7 @@
           <tinymce ref="tinymce" v-model="addFormValue.fairDescribe" :height="200" id='tinymce'/>
         </el-form-item>
 
-        <el-form-item label="是否已删除" :label-width="formLabelWidth" prop="isDelete">
+        <el-form-item label="去激活" :label-width="formLabelWidth" prop="isDelete">
           <el-switch v-model="addFormValue.isDelete" :disabled="true"></el-switch>
         </el-form-item>
       </el-form>

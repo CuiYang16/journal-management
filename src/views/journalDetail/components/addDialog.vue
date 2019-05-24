@@ -216,7 +216,7 @@
           <el-switch v-model="addFormValue.isBorrow"></el-switch>
         </el-form-item>
 
-        <el-form-item label="是否已删除" :label-width="formLabelWidth" prop="isDelete">
+        <el-form-item label="去激活" :label-width="formLabelWidth" prop="isDelete">
           <el-switch v-model="addFormValue.isDelete" :disabled="true"></el-switch>
         </el-form-item>
 
@@ -480,7 +480,7 @@ export default {
           { required: true, message: "请输入简述", trigger: "blur" }
         ],
         isDelete: [
-          { required: false, message: "请选择是否已删除", trigger: "change" }
+          { required: false, message: "请选择是否去激活", trigger: "change" }
         ],
         typeId: [
           { required: false, message: "请输入选择类别", trigger: "change" }

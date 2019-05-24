@@ -65,7 +65,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="是否已删除" :label-width="formLabelWidth" prop="isDelete">
+        <el-form-item label="去激活" :label-width="formLabelWidth" prop="isDelete">
           <el-switch v-model="editDialogValue.editFormValue.isDelete"></el-switch>
         </el-form-item>
       </el-form>

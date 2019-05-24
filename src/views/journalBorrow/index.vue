@@ -172,7 +172,7 @@
         <div style="margin-top:20px">
           <el-radio-group v-model="delType" size="small">
             <el-radio :label="0" border>彻底删除</el-radio>
-            <el-radio :label="1" border>改变去激活状态</el-radio>
+            <el-radio :label="1" border>去激活</el-radio>
           </el-radio-group>
         </div>
         <div slot="footer" class="dialog-footer">
