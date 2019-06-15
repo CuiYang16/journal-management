@@ -9,13 +9,6 @@ export function getJournalFairs(pageNum, pageSize,isDelete,overdue) {
   })
 }
 
-//获取杂志信息
-export function getJournalds() {
-  return request({
-    url: '/jm-fair/journal-fair//fair-journals',
-    method: 'get',
-  })
-}
 
 //创建杂志书展信息
 export function createJournalFairs(fairInformation, token) {

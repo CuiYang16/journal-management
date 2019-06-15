@@ -53,14 +53,14 @@ const actions = {
           const { list, val } = response;
           
           if (!list) {
-            reject("Verification failed, please Login again.");
+            reject("验证失败，请重试!");
           }
 
           // const { roles, name, avatar, introduction } = data
 
           // roles must be a non-empty array
           if (!list || list.length <= 0) {
-            reject("getInfo: roles must be a non-null array!");
+            reject("无法正确获取角色信息，请重试!");
           }
           commit("SET_AVATAR", require("F:/MyWorkSpace/bishe-vue/journal-door/static/avatar-img/" + response.avatar));
           commit("SET_ROLES", list);
