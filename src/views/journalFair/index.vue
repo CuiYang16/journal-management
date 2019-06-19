@@ -122,7 +122,7 @@
                 <el-button
                   :loading="downloadLoading"
                   type="primary"
-                  @click="handleDownload(scope.row.fairName)"
+                  @click="handleDownload(scope.row)"
                   :disabled="scope.row.fairUsers.length<=0"
                 >导出excel</el-button>
               </div>
@@ -718,20 +718,20 @@ export default {
         }
       }
     },
-    handleDownload(fairName) {
+    handleDownload(row) {
       this.downloadLoading = true;
       import("@/vendor/Export2Excel").then(excel => {
         const multiHeader = [];
         const tHeader = ["用户名", "用户联系方式"];
         const filterVal = ["userName", "userPhone"];
-        const list = this.userFairData;
+        const list = row.fairUsers;
         const data = this.formatJson(filterVal, list);
         const merges = [];
         excel.export_json_to_excel({
           multiHeader,
           header: tHeader,
           data,
-          filename: "参展名单-" + fairName,
+          filename: "参展名单-" + row.fairName,
           merges,
           autoWidth: this.autoWidth,
           bookType: this.bookType

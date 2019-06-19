@@ -475,9 +475,8 @@ export default {
         });
     },
     delRecursion(row) {
-      if (
+      if (row.children != null &&
         row.children.length > 0 &&
-        row.children != null &&
         typeof row.children != "undefined"
       ) {
         for (var i = 0; i < row.children.length; i++) {
